@@ -1,0 +1,2745 @@
+<style>
+:root {
+  --ink: #0f1117;
+  --paper: #f7f5f0;
+  --accent: #1a6b4a;
+  --accent2: #e85d26;
+  --accent3: #2d5fa6;
+  --muted: #8a8a8a;
+  --border: #e0ddd7;
+  --card: #ffffff;
+  --warn: #f0a500;
+  --weekend-bg: #fdf3f0;
+  --optional-bg: #f0f6ff;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  
+}
+
+/* HEADER */
+.site-header {
+  background: var(--ink);
+  padding: 32px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  
+  
+  border-bottom: 3px solid var(--accent);
+}
+.logo-block { display: flex; align-items: center; gap: 14px; }
+.logo-icon {
+  width: 38px; height: 38px;
+  background: var(--accent);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'DM Serif Display', serif;
+  color: #fff; font-size: 18px; font-weight: 400;
+}
+.logo-text { color: #fff; }
+.logo-text .name { font-family: 'DM Serif Display', serif; font-size: 22px; }
+.logo-text .subtitle { font-size: 12px; color: #888; letter-spacing: .08em; text-transform: uppercase; margin-top: 1px; }
+.header-right { display: flex; align-items: center; gap: 16px; }
+.today-badge {
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 100px;
+  padding: 6px 14px;
+  color: #ccc;
+  font-size: 12px;
+}
+
+/* SEARCH + FILTERS */
+.controls {
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  padding: 18px 48px;
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.search-wrap {
+  flex: 1; min-width: 220px;
+  position: relative;
+}
+.search-wrap input {
+  width: 100%;
+  padding: 10px 16px 10px 40px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  background: var(--paper);
+  outline: none;
+  transition: border-color .2s;
+}
+.search-wrap input:focus { border-color: var(--accent); }
+.search-icon {
+  position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+  color: var(--muted); font-size: 15px;
+}
+.filter-btn {
+  padding: 9px 16px;
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+  background: var(--paper);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px; font-weight: 500;
+  cursor: pointer;
+  transition: all .15s;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.filter-btn:hover { border-color: var(--accent); color: var(--accent); }
+.filter-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+.result-count {
+  font-size: 12px; color: var(--muted);
+  white-space: nowrap;
+}
+
+/* MAIN LAYOUT */
+.page-body { display: flex; }
+.country-nav {
+  width: 200px;
+  flex-shrink: 0;
+  padding: 24px 0;
+  position: relative;
+  top: 96px;
+  max-height: 600px;
+  overflow-y: auto;
+  border-right: 1px solid var(--border);
+  background: var(--card);
+}
+.country-nav::-webkit-scrollbar { width: 4px; }
+.country-nav::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+.nav-section-label {
+  font-size: 10px; font-weight: 600; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--muted);
+  padding: 12px 20px 4px;
+}
+.nav-country {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 20px;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--ink);
+  border-left: 3px solid transparent;
+  transition: all .12s;
+}
+.nav-country:hover { background: var(--paper); }
+.nav-country.active { border-left-color: var(--accent); background: #f0f9f5; color: var(--accent); font-weight: 600; }
+.nav-country.hidden { display: none; }
+.flag { font-size: 16px; line-height: 1; }
+.count-pill {
+  margin-left: auto;
+  font-size: 10px;
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 1px 6px;
+  color: var(--muted);
+}
+.nav-country.active .count-pill { background: #d4edde; border-color: #a8d8bb; color: var(--accent); }
+
+/* CONTENT */
+.content-area {
+  flex: 1;
+  padding: 32px 40px;
+  overflow-y: auto;
+}
+.country-section { display: none; }
+.country-section.visible { display: block; }
+
+.country-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--ink);
+}
+.country-title-block { display: flex; align-items: center; gap: 14px; }
+.country-flag-lg { font-size: 36px; line-height: 1; }
+.country-name {
+  font-family: 'DM Serif Display', serif;
+  font-size: 32px;
+  line-height: 1.1;
+}
+.country-subtitle { font-size: 13px; color: var(--muted); margin-top: 3px; }
+.holiday-count-badge {
+  background: var(--ink);
+  color: #fff;
+  font-size: 13px; font-weight: 500;
+  padding: 6px 14px;
+  border-radius: 100px;
+}
+
+/* SECTION HEADERS */
+.section-label {
+  font-size: 11px; font-weight: 600; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--muted);
+  margin: 24px 0 10px;
+  display: flex; align-items: center; gap: 8px;
+}
+.section-label::after {
+  content: ''; flex: 1; height: 1px; background: var(--border);
+}
+
+/* HOLIDAY TABLE */
+.holiday-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+.holiday-table th {
+  text-align: left;
+  font-size: 10px; font-weight: 600; letter-spacing: .07em;
+  text-transform: uppercase; color: var(--muted);
+  padding: 8px 12px;
+  background: var(--paper);
+  border-bottom: 1px solid var(--border);
+}
+.holiday-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+.holiday-table tr:last-child td { border-bottom: none; }
+.holiday-table tr:hover td { background: #fafaf8; }
+.holiday-table.weekend-tbl tr:hover td { background: var(--weekend-bg); }
+.holiday-table.optional-tbl tr:hover td { background: var(--optional-bg); }
+
+.date-cell { color: var(--muted); min-width: 160px; }
+.day-chip {
+  display: inline-block;
+  font-size: 10px; font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 4px;
+  margin-left: 6px;
+  background: var(--paper);
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+.day-chip.mon,.day-chip.tue,.day-chip.wed,.day-chip.thu { background: #e8f5ee; border-color: #b3dcc5; color: #1a6b4a; }
+.day-chip.fri { background: #fff3e0; border-color: #ffd08a; color: #b45309; }
+.day-chip.sat,.day-chip.sun { background: #fef0ef; border-color: #f5b8ae; color: #c0392b; }
+
+.holiday-name { font-weight: 500; }
+.tentative-tag {
+  font-size: 10px; color: var(--warn);
+  font-weight: 600; margin-left: 6px;
+}
+.state-dots { display: flex; gap: 4px; flex-wrap: wrap; }
+.state-dot {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  font-size: 9px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  background: #e8f5ee; color: #1a6b4a;
+  border: 1.5px solid #b3dcc5;
+  cursor: default;
+  position: relative;
+}
+.state-dot:hover::after {
+  content: attr(data-state);
+  position: absolute; bottom: 26px; left: 50%;
+  transform: translateX(-50%);
+  background: var(--ink); color: #fff;
+  font-size: 10px; padding: 3px 7px; border-radius: 4px;
+  white-space: nowrap;
+  z-index: 10;
+}
+.sr-cell { color: var(--muted); font-size: 12px; width: 36px; }
+
+/* WEEKEND SECTION */
+.weekend-section {
+  background: var(--weekend-bg);
+  border: 1px solid #f5d5cc;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+.weekend-section .section-label { padding: 12px 16px 0; margin: 0 0 0; }
+.weekend-section .holiday-table { margin-bottom: 0; }
+.weekend-section .holiday-table th { background: transparent; }
+
+/* OPTIONAL SECTION */
+.optional-section {
+  background: var(--optional-bg);
+  border: 1px solid #c3d9f5;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+.optional-section .section-label { padding: 12px 16px 0; margin: 0; }
+.optional-section .holiday-table th { background: transparent; }
+
+/* NOTES */
+.notes-block {
+  margin-top: 16px;
+  padding: 12px 16px;
+  background: #f9f8f5;
+  border-left: 3px solid var(--muted);
+  border-radius: 0 6px 6px 0;
+  font-size: 12px; color: var(--muted);
+  line-height: 1.7;
+}
+.notes-block p + p { margin-top: 4px; }
+
+/* STATS BAR */
+.stats-row {
+  display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap;
+}
+.stat-chip {
+  display: flex; align-items: center; gap: 7px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  font-size: 12px;
+}
+.stat-chip .num { font-size: 18px; font-weight: 600; font-family: 'DM Serif Display', serif; }
+.stat-chip.green .num { color: var(--accent); }
+.stat-chip.orange .num { color: var(--accent2); }
+.stat-chip.blue .num { color: var(--accent3); }
+
+/* INDIA STATE TABLE */
+.state-header-row th {
+  border-bottom: 2px solid var(--ink) !important;
+}
+
+/* SEARCH HIGHLIGHT */
+.hl { background: #ffe066; border-radius: 2px; }
+
+/* EMPTY STATE */
+.empty-state {
+  text-align: center; padding: 80px 40px;
+  color: var(--muted);
+}
+.empty-state .big { font-size: 48px; margin-bottom: 12px; }
+.empty-state p { font-size: 14px; }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .site-header { padding: 20px 20px; }
+  .controls { padding: 14px 20px; }
+  .country-nav { display: none; }
+  .content-area { padding: 20px; }
+}
+
+/* ANIMATIONS */
+.country-section { animation: fadeIn .2s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+/* INDIA STATE TABS */
+.india-view-toggle {
+  display: flex; align-items: center; gap: 0;
+  border: 1.5px solid var(--border);
+  border-radius: 8px; overflow: hidden;
+  margin-bottom: 20px;
+  background: var(--paper);
+  width: fit-content;
+}
+.india-view-btn {
+  padding: 8px 16px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px; font-weight: 500;
+  cursor: pointer; border: none;
+  background: transparent; color: var(--muted);
+  transition: all .15s;
+  border-right: 1.5px solid var(--border);
+}
+.india-view-btn:last-child { border-right: none; }
+.india-view-btn:hover { color: var(--ink); background: #f0f0ec; }
+.india-view-btn.active { background: var(--ink); color: #fff; }
+
+.state-tabs-bar {
+  display: flex; gap: 6px; flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.state-tab-btn {
+  padding: 7px 16px;
+  border-radius: 100px;
+  border: 1.5px solid var(--border);
+  background: var(--paper);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px; font-weight: 500;
+  cursor: pointer; color: var(--ink);
+  transition: all .15s;
+  display: flex; align-items: center; gap: 6px;
+}
+.state-tab-btn:hover { border-color: var(--accent); color: var(--accent); }
+.state-tab-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+.state-tab-btn .stcount { font-size: 11px; opacity: .75; }
+
+.state-section { display: none; }
+.state-section.visible { display: block; }
+
+.state-header-block {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 16px;
+  background: #f0f9f5;
+  border: 1px solid #b3dcc5;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+.state-header-name {
+  font-family: 'DM Serif Display', serif;
+  font-size: 20px; color: var(--accent);
+}
+.state-total-pill {
+  margin-left: auto;
+  background: var(--accent);
+  color: #fff;
+  font-size: 12px; font-weight: 600;
+  padding: 4px 12px; border-radius: 100px;
+}
+.state-note {
+  font-size: 11px; color: var(--muted);
+  padding: 8px 12px;
+  background: #f9f8f5; border-radius: 6px;
+  border-left: 3px solid var(--border);
+  margin-top: 12px;
+}
+
+/* Sub-nav state items under India */
+.nav-state {
+  display: flex; align-items: center; gap: 8px;
+  padding: 5px 20px 5px 32px;
+  cursor: pointer; font-size: 12px;
+  color: var(--muted);
+  border-left: 3px solid transparent;
+  transition: all .12s;
+}
+.nav-state:hover { color: var(--ink); background: var(--paper); }
+.nav-state.active { color: var(--accent); border-left-color: var(--accent); background: #f0f9f5; font-weight: 600; }
+.nav-india-parent.active { color: var(--accent); border-left-color: var(--accent); background: #f0f9f5; font-weight: 600; }
+
+/* ── TODAY BANNER ─────────────────────────────────────── */
+.today-banner {
+  display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  background: var(--ink);
+  border-radius: var(--r);
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  color: #fff;
+}
+.today-date-block { display: flex; flex-direction: column; }
+.today-label { font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: #888; }
+.today-value { font-size: 18px; font-weight: 700; font-family: 'DM Serif Display', serif; color: #fff; line-height: 1.2; margin-top: 2px; }
+.today-divider { width: 1px; height: 36px; background: rgba(255,255,255,.15); flex-shrink: 0; }
+.upcoming-block { flex: 1; display: flex; flex-direction: column; gap: 5px; }
+.upcoming-label { font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: #888; }
+.upcoming-list { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.upcoming-item { display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12); border-radius: 6px; padding: 5px 10px; }
+.upcoming-item.next-h { background: #1a6b4a; border-color: #2e844a; }
+.upcoming-name { font-size: 12px; font-weight: 600; color: #fff; }
+.upcoming-date-s { font-size: 11px; color: rgba(255,255,255,.6); }
+.upcoming-days-s { font-size: 11px; font-weight: 700; color: #6de8a8; white-space: nowrap; }
+.upcoming-item.next-h .upcoming-days-s { color: #b5f5d1; }
+
+/* ── HOLIDAY ROW HIGHLIGHTS ──────────────────────────── */
+.holiday-table tr.row-next td { background: #e8f5ee !important; }
+.holiday-table tr.row-next .holiday-name { font-weight: 700; color: #1a6b4a !important; }
+.holiday-table tr.row-soon td { background: #fffbee !important; }
+.holiday-table tr.row-past td { opacity: .45; }
+.holiday-table tr.row-today td { background: #c9edd8 !important; }
+.optional-tag {
+  display: inline-flex; align-items: center;
+  font-size: 10px; font-weight: 600;
+  padding: 1px 7px; border-radius: 100px;
+  margin-left: 7px; vertical-align: middle;
+  background: #f0f0ff; color: #5a1ba9;
+  border: 1px solid #c2b0f0;
+  white-space: nowrap;
+}
+.up-optional-tag {
+  font-size: 9px; font-weight: 600; color: rgba(255,255,255,.65);
+  background: rgba(90,27,169,.4); border-radius: 100px;
+  padding: 1px 6px; margin-left: 4px; white-space: nowrap;
+}
+.countdown-pill {
+  display: inline-flex; align-items: center;
+  font-size: 10px; font-weight: 700;
+  padding: 2px 8px; border-radius: 100px;
+  margin-left: 8px; vertical-align: middle; white-space: nowrap;
+}
+.cp-next { background: #1a6b4a; color: #fff; }
+.cp-soon { background: #fef3e2; color: #8a4301; border: 1px solid #fcb95b; }
+.cp-today { background: #2e844a; color: #fff; }
+
+/* ── INDIA CALENDAR PLANNER ─────────────────────────── */
+.planner-wrap { margin-top:20px }
+.planner-controls { display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px }
+.planner-controls label { font-size:12px;color:var(--muted);white-space:nowrap }
+.planner-controls select { font-family:inherit;font-size:12px;padding:5px 9px;border-radius:var(--r);border:1px solid var(--bd);background:var(--wh);color:var(--tx);cursor:pointer }
+.lw-summary { background:#f0f9f5;border:1px solid #b3dcc5;border-radius:var(--r);padding:9px 13px;margin-bottom:14px;font-size:12px;color:var(--txw) }
+.lw-summary strong { color:var(--accent) }
+.sug-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px;margin-bottom:18px }
+.sug-card { background:var(--wh);border:1px solid var(--bd);border-radius:var(--r);padding:10px 12px;cursor:pointer;transition:border-color .12s }
+.sug-card:hover { border-color:var(--accent) }
+.sug-card.sel { border:2px solid var(--accent);background:#f0f9f5 }
+.sc-top { display:flex;align-items:flex-start;justify-content:space-between;gap:6px;margin-bottom:4px }
+.sc-dates { font-size:13px;font-weight:600;color:var(--tx) }
+.sc-badge { font-size:10px;font-weight:700;padding:2px 7px;border-radius:100px;white-space:nowrap }
+.b-3 { background:#e8f4fd;color:#014486 }
+.b-4 { background:#eef6ee;color:#1a6b4a }
+.b-5 { background:#f3eeff;color:#5a1ba9 }
+.b-6 { background:#fef3e2;color:#8a4301 }
+.sc-hname { font-size:11px;color:var(--txm);margin-bottom:3px }
+.sc-leave { font-size:11px;color:var(--txm) }
+.sc-leave em { color:var(--accent);font-style:normal;font-weight:600 }
+
+/* 12-month grid */
+.cal-year-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-bottom:16px }
+.month-block { background:var(--wh);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden }
+.month-title { padding:7px 10px;font-size:12px;font-weight:700;background:#f3f2f2;border-bottom:1px solid var(--bdl);color:var(--tx) }
+.mini-cal { padding:6px 8px }
+.mc-dow { display:grid;grid-template-columns:repeat(7,1fr);gap:1px;margin-bottom:2px }
+.mc-dow span { font-size:9px;text-align:center;color:var(--txm);font-weight:600 }
+.mc-grid { display:grid;grid-template-columns:repeat(7,1fr);gap:1px }
+.mc-day { font-size:10px;text-align:center;padding:3px 1px;border-radius:3px;position:relative;cursor:default;line-height:1.2;min-height:22px }
+.mc-day.empty { background:transparent }
+.mc-day.wkend { color:#ba0517 }
+.mc-day.hday { background:#eef6ee;color:#1a6b4a;font-weight:700;border-radius:3px }
+.mc-day.leave-d { background:#e8f4fd;color:#014486;font-weight:700 }
+.mc-day.lw-d { background:#f3eeff;color:#5a1ba9 }
+.mc-day.today-d { outline:2px solid var(--tx);outline-offset:-1px }
+.mc-day[title] { cursor:pointer }
+.mc-day.hday[title]:hover,.mc-day.leave-d[title]:hover { filter:brightness(.92) }
+
+.cal-legend { display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px }
+.cl-item { display:flex;align-items:center;gap:5px;font-size:11px;color:var(--txm) }
+.cl-box { width:11px;height:11px;border-radius:2px;flex-shrink:0 }
+
+.detail-box { background:#f3f2f2;border-radius:var(--r);padding:11px 13px;font-size:12px;margin-top:4px }
+.db-title { font-size:14px;font-weight:700;margin-bottom:8px;color:var(--tx) }
+.db-row { display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--bdl) }
+.db-row:last-of-type { border-bottom:none }
+.db-lbl { color:var(--txm) }
+.db-val { font-weight:600;color:var(--tx) }
+.db-btn { margin-top:9px }
+</style>
+
+
+<header class="site-header">
+  <div class="logo-block">
+    <div class="logo-icon">A</div>
+    <div class="logo-text">
+      <div class="name">Azentio</div>
+      <div class="subtitle">India · Holiday List · 2026</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="today-badge" id="today-display"></div>
+  </div>
+</header>
+
+<div class="controls">
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="search-input" placeholder="Search holiday or date…">
+  </div>
+  <button class="filter-btn active" data-filter="all" onclick="setFilter('all',this)">All</button>
+  <button class="filter-btn" data-filter="fixed" onclick="setFilter('fixed',this)">Fixed</button>
+  <button class="filter-btn" data-filter="optional" onclick="setFilter('optional',this)">Optional</button>
+  <button class="filter-btn" data-filter="weekend" onclick="setFilter('weekend',this)">Weekend</button>
+  <div class="result-count" id="result-count"></div>
+</div>
+
+
+<div class="page-body">
+  <nav class="country-nav" id="country-nav"></nav>
+  <div class="content-area" id="content-area"></div>
+</div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────────
+const COUNTRIES = [
+  {
+    id: 'india', name: 'India', flag: '🇮🇳', region: 'asia',
+    notes: ['Employees working at the client site will observe the client\'s Holiday List.','Employees working in locations other than those specified above will follow leave of the location closest/mapped to them.'],
+    fixed: [
+      { date: 'Thu, 1 Jan', holiday: 'New Year\'s Day', states: ['MH','KL','TN','KA','TG'] },
+      { date: 'Thu, 15 Jan', holiday: 'Pongal / Makara Sankranti Festival', states: ['TN','KA','TG'] },
+      { date: 'Mon, 26 Jan', holiday: 'Republic Day', states: ['MH','KL','TN','KA','TG'] },
+      { date: 'Tue, 3 Mar', holiday: 'Holi (Second Day)', states: ['MH'] },
+      { date: 'Thu, 19 Mar', holiday: 'Ugadi Festival', states: ['TG'] },
+      { date: 'Fri, 3 Apr', holiday: 'Good Friday', states: ['MH','KL','TN','KA','TG'] },
+      { date: 'Tue, 14 Apr', holiday: 'Tamil New Year', states: ['TN'] },
+      { date: 'Wed, 15 Apr', holiday: 'Vishu', states: ['KL'] },
+      { date: 'Fri, 1 May', holiday: 'May Day / Maharashtra Din', states: ['MH','KL','TN','KA','TG'] },
+      { date: 'Wed, 27 May', holiday: 'Id-ul-Ad\'ha (Bakrid)', states: ['KL'] },
+      { date: 'Tue, 25 Aug', holiday: 'First Onam / Milad-i-Sherif (Birthday of Prophet)', states: ['KL'] },
+      { date: 'Wed, 26 Aug', holiday: 'Thiruvonam', states: ['KL'] },
+      { date: 'Mon, 14 Sep', holiday: 'Vinayak Chathurthi', states: ['MH','TN','KA','TG'] },
+      { date: 'Fri, 2 Oct', holiday: 'Gandhi Jayanthi', states: ['MH','KL','TN','KA','TG'] },
+      { date: 'Tue, 20 Oct', holiday: 'Dasara / Vijaya Dashmi / Mahanavami / Ayudhapooja', states: ['MH','KL','TN','KA','TG'] },
+      { date: 'Tue, 10 Nov', holiday: 'Balipadyami / Deepavali (Bali Pratipada)', states: ['MH','KA'] },
+      { date: 'Fri, 25 Dec', holiday: 'Christmas', states: ['MH','KL','TN','KA','TG'] },
+    ],
+    optional: [
+      { date: 'Fri, 16 Jan', holiday: 'Thiruvalluvar Day' },
+      { date: 'Thu, 19 Mar', holiday: 'Gudhi Padwa / Telugu New Year\'s Day / Ugadi Festival' },
+      { date: 'Fri, 20 Mar', holiday: 'Id-ul-Fitr (Ramzan)' },
+      { date: 'Tue, 31 Mar', holiday: 'Mahaveer Jayanthi' },
+      { date: 'Tue, 14 Apr', holiday: 'Tamil New Year' },
+      { date: 'Wed, 15 Apr', holiday: 'Vishu' },
+      { date: 'Mon, 20 Apr', holiday: 'Basava Jayanthi, Akshaya Tritiya' },
+      { date: 'Wed, 27 May', holiday: 'Id-ul-Ad\'ha (Bakrid)' },
+      { date: 'Thu, 28 May', holiday: 'Bakrid (Idul Azha)' },
+      { date: 'Fri, 26 Jun', holiday: 'Muharram (Yaom-E-Shahadath)' },
+      { date: 'Wed, 12 Aug', holiday: 'Karkadaka Vavu' },
+      { date: 'Wed, 26 Aug', holiday: 'Milad-un-Nabi / Eid-Milad / Thiruvonam' },
+      { date: 'Thu, 27 Aug', holiday: 'Third Onam' },
+      { date: 'Fri, 28 Aug', holiday: 'Fourth Onam / Sree Narayana Guru Jayanthi / Ayyankali Jayanthi' },
+      { date: 'Fri, 4 Sep', holiday: 'Krishna Jayanthi' },
+      { date: 'Mon, 14 Sep', holiday: 'Vinayak Chathurthi' },
+      { date: 'Wed, 21 Oct', holiday: 'Vijayadasami' },
+      { date: 'Tue, 10 Nov', holiday: 'Balipadyami / Deepavali (Bali Pratipada)' },
+      { date: 'Fri, 27 Nov', holiday: 'Kanakadasa Jayanthi' },
+    ],
+    weekend: [
+      { date: 'Sat, 17 Jan', holiday: 'Uzhavar Thirunal', states: ['TN'] },
+      { date: 'Sun, 1 Feb', holiday: 'Thai Poosam', states: ['TN'] },
+      { date: 'Sun, 15 Feb', holiday: 'Mahashivratri', states: ['MH','KA','TG'] },
+      { date: 'Sat, 21 Mar', holiday: 'Ramzan-Id (Id-Ul-Fitra)', states: ['MH','KL','TN','KA','TG'] },
+      { date: 'Sun, 22 Mar', holiday: 'Following Day Of Ramzan', states: ['TG'] },
+      { date: 'Sun, 5 Apr', holiday: 'Easter', states: ['KL','TG'] },
+      { date: 'Sat, 15 Aug', holiday: 'Independence Day', states: ['MH','KL','TN','KA','TG'] },
+      { date: 'Sat, 10 Oct', holiday: 'Mahalaya Amavasye', states: ['KA'] },
+      { date: 'Sun, 18 Oct', holiday: 'Saddula BathuKamma', states: ['TG'] },
+      { date: 'Sun, 25 Oct', holiday: 'Maharshi Valmiki Jayanthi', states: ['KA'] },
+      { date: 'Sun, 1 Nov', holiday: 'Kannada Rajyothsava', states: ['KA'] },
+      { date: 'Sun, 8 Nov', holiday: 'Deepavali (Laxmi Pujan)', states: ['MH','KL','TN','KA','TG'] },
+      { date: 'Sat, 26 Dec', holiday: 'Following Day Of Christmas (Boxing Day)', states: ['TG'] },
+    ],
+    stateTotals: {MH:12,KL:13,TN:12,KA:12,TG:12},
+    indiaStates: true,
+  },
+];
+
+const STATE_NAMES = { MH:'Maharashtra', KL:'Kerala', TN:'Tamilnadu', KA:'Karnataka', TG:'Telangana' };
+const REGION_NAMES = { all:'All Countries', asia:'Asia Pacific', 'middle-east':'Middle East', africa:'Africa', europe:'Europe / Turkey' };
+
+let currentCountry = 'india-all';
+let currentFilter = 'all';
+let currentRegion = 'all';
+let searchText = '';
+
+// ── RENDER NAV ────────────────────────────────────────
+const INDIA_STATES_LIST = [
+  {id:'india-all', label:'All States (overview)'},
+  {id:'india-MH', label:'Maharashtra'},
+  {id:'india-KL', label:'Kerala'},
+  {id:'india-TN', label:'Tamilnadu'},
+  {id:'india-KA', label:'Karnataka'},
+  {id:'india-TG', label:'Telangana'},
+];
+
+function renderNav() {
+  const nav = document.getElementById('country-nav');
+  const india = COUNTRIES.find(c => c.id === 'india');
+  const total = Object.values(india.stateTotals).reduce((a,b)=>a+b,0);
+  let html = `<div class="nav-section-label">India</div>`;
+  html += `<div class="nav-country ${currentCountry==='india'||currentCountry==='india-all'?'active':''} nav-india-parent" data-id="india" onclick="selectCountry('india-all')">
+    <span class="flag">🇮🇳</span>
+    <span>All states</span>
+  </div>`;
+  INDIA_STATES_LIST.filter(s => s.id !== 'india-all').forEach(s => {
+    const stCode = s.id.replace('india-','');
+    const stTotal = india.stateTotals[stCode] || 0;
+    html += `<div class="nav-state ${currentCountry === s.id ? 'active' : ''}" onclick="selectCountry('${s.id}')">
+      <span style="font-size:13px">📍</span>
+      <span>${s.label}</span>
+      <span class="count-pill" style="margin-left:auto">${stTotal}</span>
+    </div>`;
+  });
+  nav.innerHTML = html;
+}
+
+function getTotalCount(c) {
+  let n = (c.fixed||[]).length + (c.optional||[]).length + (c.weekend||[]).length;
+  return n;
+}
+
+function getStateCount(stCode) {
+  const india = COUNTRIES.find(c => c.id === 'india');
+  let n = 0;
+  ['fixed','optional','weekend'].forEach(type => {
+    (india[type]||[]).forEach(h => {
+      if (!h.states || h.states.includes(stCode)) n++;
+    });
+  });
+  return n;
+}
+
+function getStateHolidays(stCode) {
+  // Returns {fixed, optional, weekend} filtered to this state
+  // For optional: no state filter (all states get same pool, pick 2)
+  const india = COUNTRIES.find(c => c.id === 'india');
+  return {
+    fixed: (india.fixed||[]).filter(h => !h.states || h.states.includes(stCode)),
+    optional: (india.optional||[]),  // all optional available to all states
+    weekend: (india.weekend||[]).filter(h => !h.states || h.states.includes(stCode)),
+  };
+}
+
+function stateTabBar(activeCode) {
+  const india = COUNTRIES.find(c => c.id === 'india');
+  const states = ['MH','KL','TN','KA','TG'];
+  return `<div class="state-tabs-bar">
+    <button class="state-tab-btn${activeCode==='all'?' active':''}" onclick="selectCountry('india-all')">
+      🗺️ All states
+    </button>
+    ${states.map(s => `<button class="state-tab-btn${activeCode===s?' active':''}" onclick="selectCountry('india-${s}')">
+      📍 ${STATE_NAMES[s]} <span class="stcount">${india.stateTotals[s]}</span>
+    </button>`).join('')}
+  </div>`;
+}
+
+function renderIndiaState(stCode) {
+  const stName = STATE_NAMES[stCode];
+  const data = getStateHolidays(stCode);
+  const india = COUNTRIES.find(c => c.id === 'india');
+  const showFixed = currentFilter === 'all' || currentFilter === 'fixed';
+  const showOptional = currentFilter === 'all' || currentFilter === 'optional';
+  const showWeekend = currentFilter === 'all' || currentFilter === 'weekend';
+  const total = india.stateTotals[stCode] || 0;
+
+  let html = stateTabBar(stCode);
+
+  // Today + upcoming banner for this state
+  const allForBanner = [
+    ...data.fixed.map(h=>({...h, isOptional:false})),
+    ...data.optional.map(h=>({...h, isOptional:true}))
+  ].sort((a,b) => parseDateStr(a.date) - parseDateStr(b.date));
+  html += buildUpcomingBanner(allForBanner);
+
+  html += `<div class="state-header-block">
+    <span style="font-size:28px">🇮🇳</span>
+    <div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:2px">India · ${stCode}</div>
+      <div class="state-header-name">${stName}</div>
+    </div>
+    <span class="state-total-pill">${total} holidays</span>
+  </div>
+  <div class="stats-row">
+    <div class="stat-chip green"><span class="num">${data.fixed.length}</span><span>Fixed</span></div>
+    <div class="stat-chip blue"><span class="num">2</span><span>Floating (pick 2)</span></div>
+    <div class="stat-chip orange"><span class="num">${data.weekend.length}</span><span>Weekend</span></div>
+  </div>`;
+
+  function holidayRows(holidays) {
+    // find index of next upcoming (for row-next class)
+    let nextIdx = -1;
+    holidays.forEach((h,i) => { if (nextIdx===-1 && daysUntil(parseDateStr(h.date)) >= 0) nextIdx = i; });
+    return holidays.map((h,i) => {
+      const hDt = parseDateStr(h.date);
+      const days = daysUntil(hDt);
+      let rc = '';
+      if (days < 0) rc = 'row-past';
+      else if (days === 0) rc = 'row-today';
+      else if (i === nextIdx) rc = 'row-next';
+      else if (days <= 30) rc = 'row-soon';
+      const pill = (days >= 0 && days <= 30) ? countdownPill(hDt) : (days===0?countdownPill(hDt):'');
+      return `<tr class="${rc}">
+        <td class="sr-cell">${i+1}</td>
+        <td class="date-cell">${h.date} ${getDayChip(h.date)}</td>
+        <td class="holiday-name">${h.holiday}${pill}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  // Merge fixed + optional into one sorted list
+  const showAny = showFixed || showOptional;
+  if (showAny) {
+    const merged = [
+      ...(showFixed ? data.fixed.map(h=>({...h,isOptional:false})) : []),
+      ...(showOptional ? data.optional.map(h=>({...h,isOptional:true})) : []),
+    ].sort((a,b) => parseDateStr(a.date) - parseDateStr(b.date));
+    if (merged.length) {
+      html += `<div class="section-label">Holidays</div>
+      <table class="holiday-table">
+        <thead><tr><th>#</th><th>Date</th><th>Holiday</th></tr></thead>
+        <tbody>${holidayRowsMerged(merged)}</tbody>
+      </table>`;
+    }
+  }
+
+  if (showWeekend && data.weekend.length) {
+    html += `<div class="weekend-section">
+      <div class="section-label" style="padding:12px 16px 0;margin:0;color:#c0392b">Holidays Falling on Weekend</div>
+      <table class="holiday-table weekend-tbl">
+        <thead><tr><th>#</th><th>Date</th><th>Holiday</th></tr></thead>
+        <tbody>${holidayRows(data.weekend)}</tbody>
+      </table>
+    </div>`;
+  }
+
+  // ── LONG WEEKEND PLANNER ──
+  html += renderIndiaPlanner(stCode, data);
+
+  html += `<div class="state-note">— Employees working at client sites observe the client Holiday List. Employees in other locations follow the leave calendar of the closest mapped location.</div>`;
+  return html;
+}
+
+// ── TODAY + UPCOMING HELPERS ──────────────────────────
+const TODAY = new Date();
+TODAY.setHours(0,0,0,0);
+
+function daysUntil(dt) {
+  const d = new Date(dt); d.setHours(0,0,0,0);
+  return Math.round((d - TODAY) / 86400000);
+}
+
+function countdownPill(hDate) {
+  const days = daysUntil(hDate);
+  if (days < 0) return '';
+  if (days === 0) return `<span class="countdown-pill cp-today">Today!</span>`;
+  if (days <= 7) return `<span class="countdown-pill cp-next">In ${days}d</span>`;
+  if (days <= 30) return `<span class="countdown-pill cp-soon">In ${days}d</span>`;
+  return '';
+}
+
+function rowClass(hDate) {
+  const days = daysUntil(hDate);
+  if (days < 0) return 'row-past';
+  if (days === 0) return 'row-today';
+  return '';  // applied dynamically after finding the first upcoming
+}
+
+function buildUpcomingBanner(allHolidays) {
+  // allHolidays: array of {date: 'Thu, 1 Jan', holiday: '...'}
+  const dated = allHolidays
+    .map(h => ({ ...h, dt: parseDateStr(h.date), days: daysUntil(parseDateStr(h.date)) }))
+    .filter(h => h.days >= 0)
+    .sort((a,b) => a.days - b.days);
+
+  const upcoming = dated.slice(0, 4);  // show next 4
+
+  const dateStr = TODAY.toLocaleDateString('en-GB', {weekday:'long', day:'numeric', month:'long', year:'numeric'});
+
+  if (!upcoming.length) {
+    return `<div class="today-banner">
+      <div class="today-date-block"><div class="today-label">Today</div><div class="today-value">${dateStr}</div></div>
+      <div class="today-divider"></div>
+      <div class="upcoming-block"><div class="upcoming-label">Upcoming holidays</div><div class="upcoming-list"><span style="font-size:12px;color:#888">No more holidays in 2026</span></div></div>
+    </div>`;
+  }
+
+  const items = upcoming.map((h, i) => {
+    const dLabel = h.days === 0 ? 'Today!' : `${h.days}d away`;
+    const optTag = h.isOptional ? `<span class="up-optional-tag">optional</span>` : '';
+    return `<div class="upcoming-item${i===0?' next-h':''}">
+      <div>
+        <div class="upcoming-name">${h.holiday}${optTag}</div>
+        <div class="upcoming-date-s">${h.date}</div>
+      </div>
+      <div class="upcoming-days-s">${dLabel}</div>
+    </div>`;
+  }).join('');
+
+  return `<div class="today-banner">
+    <div class="today-date-block"><div class="today-label">Today</div><div class="today-value">${dateStr}</div></div>
+    <div class="today-divider"></div>
+    <div class="upcoming-block"><div class="upcoming-label">Upcoming holidays</div><div class="upcoming-list">${items}</div></div>
+  </div>`;
+}
+
+// ── Parse "Thu, 1 Jan" → Date object (2026) ──────────
+function parseDateStr(s) {
+  const months = {Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
+  const parts = s.trim().split(/[\s,]+/);
+  const day = parseInt(parts[1]);
+  const mon = months[parts[2]];
+  return new Date(2026, mon, day);
+}
+function dateKey2(dt) {
+  return `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`;
+}
+function addDays2(dt, n) { const d = new Date(dt); d.setDate(d.getDate()+n); return d; }
+function fmtShort(dt) { return dt.toLocaleDateString('en-GB',{day:'numeric',month:'short'}); }
+
+function holidayRowsMerged(holidays) {
+  let nextIdx = -1;
+  holidays.forEach((h,i) => { if (nextIdx===-1 && daysUntil(parseDateStr(h.date)) >= 0) nextIdx = i; });
+  return holidays.map((h,i) => {
+    const days = daysUntil(parseDateStr(h.date));
+    let rc = '';
+    if (days < 0) rc = 'row-past';
+    else if (days === 0) rc = 'row-today';
+    else if (i === nextIdx) rc = 'row-next';
+    else if (days <= 30) rc = 'row-soon';
+    const pill = (days >= 0 && days <= 30) ? countdownPill(parseDateStr(h.date)) : '';
+    const optTag = h.isOptional ? '<span class="optional-tag">optional</span>' : '';
+    return '<tr class="'+rc+'"><td class="sr-cell">'+(i+1)+'</td><td class="date-cell">'+h.date+' '+getDayChip(h.date)+'</td><td class="holiday-name">'+h.holiday+optTag+pill+'</td></tr>';
+  }).join('');
+}
+
+
+
+function buildHolidaySet(data) {
+  const set = {};
+  data.fixed.forEach(h => { const d = parseDateStr(h.date); set[dateKey2(d)] = {name:h.holiday,type:'fixed'}; });
+  data.weekend.forEach(h => { const d = parseDateStr(h.date); set[dateKey2(d)] = {name:h.holiday,type:'weekend'}; });
+  return set;
+}
+
+function findLongWeekends(holidaySet, minLen) {
+  const hDates = Object.keys(holidaySet).filter(k => holidaySet[k].type==='fixed').sort();
+  const results = [];
+  const seen = new Set();
+
+  hDates.forEach(hk => {
+    const base = new Date(hk);
+    // try window starting 3 days before, ending 3 days after
+    for (let startOff = -3; startOff <= 0; startOff++) {
+      const start = addDays2(base, startOff);
+      if (start.getFullYear() !== 2026) continue;
+      for (let len = minLen; len <= 7; len++) {
+        const end = addDays2(start, len-1);
+        if (end.getFullYear() !== 2026) continue;
+        const days = [];
+        for (let i=0;i<len;i++) days.push(addDays2(start,i));
+        const holDays = days.filter(d => holidaySet[dateKey2(d)]?.type==='fixed');
+        const wkDays = days.filter(d => { const w=d.getDay(); return w===0||w===6; });
+        const wkendHolDays = days.filter(d => holidaySet[dateKey2(d)]?.type==='weekend');
+        const offDays = new Set([...holDays.map(dateKey2), ...wkDays.map(dateKey2), ...wkendHolDays.map(dateKey2)]);
+        const leaveDays = days.filter(d => !offDays.has(dateKey2(d)));
+        if (holDays.length < 1) continue;
+        if (leaveDays.length < 1 || leaveDays.length > 3) continue;
+        // All days must be contiguous off or leave
+        const key = `${dateKey2(start)}_${dateKey2(end)}`;
+        if (seen.has(key)) continue;
+        seen.add(key);
+        results.push({ start, end, totalDays:len, holDays, wkDays, leaveDays, wkendHolDays, key });
+      }
+    }
+  });
+
+  return results
+    .filter(r => r.totalDays >= minLen)
+    .sort((a,b) => a.start - b.start);
+}
+
+function renderIndiaPlanner(stCode, data) {
+  const hSet = buildHolidaySet(data);
+  const minLen = 4; // default, will be controlled via JS
+  const sId = `planner-${stCode}`;
+
+  return `<div class="section-label" style="margin-top:24px">Long weekend planner</div>
+  <div class="planner-wrap" id="${sId}">
+    <div class="planner-controls">
+      <label>Minimum break length</label>
+      <select onchange="rebuildPlanner('${stCode}',parseInt(this.value))">
+        <option value="3">3 days (1 leave)</option>
+        <option value="4" selected>4 days (1–2 leave)</option>
+        <option value="5">5 days (2–3 leave)</option>
+      </select>
+    </div>
+    <div id="lw-summary-${stCode}" class="lw-summary"></div>
+    <div id="lw-cards-${stCode}" class="sug-grid"></div>
+    <div class="cal-legend">
+      <div class="cl-item"><div class="cl-box" style="background:#eef6ee;border:1px solid #91c890"></div> Public holiday</div>
+      <div class="cl-item"><div class="cl-box" style="background:#e8f4fd;border:1px solid #9dc9f5"></div> Suggested leave</div>
+      <div class="cl-item"><div class="cl-box" style="background:#f3eeff;border:1px solid #c2b0f0"></div> Long weekend block</div>
+      <div class="cl-item"><div class="cl-box" style="background:#f3f2f2;border:1px solid #dddbda"></div> Weekend</div>
+    </div>
+    <div id="lw-cal-${stCode}" class="cal-year-grid"></div>
+    <div id="lw-detail-${stCode}"></div>
+  </div>`;
+}
+
+// ── PLANNER STATE ─────────────────────────────────────
+const plannerState = {};
+
+function rebuildPlanner(stCode, minLen) {
+  plannerState[stCode] = plannerState[stCode] || {};
+  plannerState[stCode].minLen = minLen;
+  plannerState[stCode].selIdx = null;
+  renderPlanner(stCode);
+}
+
+function renderPlanner(stCode) {
+  const india = COUNTRIES.find(c => c.id === 'india');
+  const data = getStateHolidays(stCode);
+  const hSet = buildHolidaySet(data);
+  const ps = plannerState[stCode] = plannerState[stCode] || {minLen:4, selIdx:null};
+  const sugs = findLongWeekends(hSet, ps.minLen);
+  ps.sugs = sugs;
+
+  // Summary
+  const sumEl = document.getElementById(`lw-summary-${stCode}`);
+  if (sumEl) sumEl.innerHTML = `<strong>${sugs.length} long weekend opportunity${sugs.length!==1?'s':''}</strong> found in 2026 for ${STATE_NAMES[stCode]}. Click a suggestion to highlight it on the calendar.`;
+
+  // Cards
+  const cardsEl = document.getElementById(`lw-cards-${stCode}`);
+  if (cardsEl) {
+    if (!sugs.length) { cardsEl.innerHTML = '<div style="font-size:12px;color:var(--txm);padding:8px 0">No opportunities found for selected length.</div>'; }
+    else {
+      const MNAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      cardsEl.innerHTML = sugs.map((s,i) => {
+        const n = s.totalDays;
+        const bcls = n>=6?'b-6':n===5?'b-5':n===4?'b-4':'b-3';
+        const blbl = n+'‑day break';
+        const hnames = s.holDays.map(d=>hSet[dateKey2(d)]?.name||'').filter(Boolean);
+        const lnames = s.leaveDays.map(d=>fmtShort(d)).join(', ');
+        return `<div class="sug-card${ps.selIdx===i?' sel':''}" onclick="selectLW('${stCode}',${i})">
+          <div class="sc-top">
+            <div class="sc-dates">${fmtShort(s.start)} – ${fmtShort(s.end)}</div>
+            <span class="sc-badge ${bcls}">${blbl}</span>
+          </div>
+          <div class="sc-hname">${hnames.join(', ')}</div>
+          <div class="sc-leave">Take <em>${s.leaveDays.length}</em> leave → ${n} days off</div>
+        </div>`;
+      }).join('');
+    }
+  }
+
+  renderPlannerCal(stCode, hSet, sugs, ps.selIdx);
+  renderPlannerDetail(stCode, hSet, sugs, ps.selIdx);
+}
+
+function selectLW(stCode, idx) {
+  plannerState[stCode] = plannerState[stCode] || {};
+  plannerState[stCode].selIdx = idx;
+  const india = COUNTRIES.find(c => c.id === 'india');
+  const data = getStateHolidays(stCode);
+  const hSet = buildHolidaySet(data);
+  const sugs = plannerState[stCode].sugs || [];
+  // Update card selection
+  const cardsEl = document.getElementById(`lw-cards-${stCode}`);
+  if (cardsEl) cardsEl.querySelectorAll('.sug-card').forEach((el,i) => el.classList.toggle('sel', i===idx));
+  renderPlannerCal(stCode, hSet, sugs, idx);
+  renderPlannerDetail(stCode, hSet, sugs, idx);
+}
+
+function renderPlannerCal(stCode, hSet, sugs, selIdx) {
+  const calEl = document.getElementById(`lw-cal-${stCode}`);
+  if (!calEl) return;
+
+  // Build leave+lw sets for selected suggestion
+  let leaveSet = new Set(), lwSet = new Set();
+  if (selIdx !== null && sugs[selIdx]) {
+    const s = sugs[selIdx];
+    s.leaveDays.forEach(d => leaveSet.add(dateKey2(d)));
+    let cur = new Date(s.start);
+    while (cur <= s.end) { lwSet.add(dateKey2(cur)); cur = addDays2(cur,1); }
+  }
+
+  const today = new Date();
+  const MNAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const DOWS = ['S','M','T','W','T','F','S'];
+
+  let html = '';
+  for (let m=0; m<12; m++) {
+    const firstDay = new Date(2026, m, 1).getDay();
+    const daysInMonth = new Date(2026, m+1, 0).getDate();
+    // Check if this month has any highlight
+    let monthHasHL = false;
+    for (let d=1;d<=daysInMonth;d++) {
+      const k = dateKey2(new Date(2026,m,d));
+      if (hSet[k] || leaveSet.has(k) || lwSet.has(k)) { monthHasHL=true; break; }
+    }
+
+    html += `<div class="month-block">
+      <div class="month-title">${MNAMES[m]} 2026</div>
+      <div class="mini-cal">
+        <div class="mc-dow">${DOWS.map(d=>`<span>${d}</span>`).join('')}</div>
+        <div class="mc-grid">`;
+
+    for (let e=0;e<firstDay;e++) html += `<div class="mc-day empty"></div>`;
+    for (let d=1;d<=daysInMonth;d++) {
+      const dt = new Date(2026,m,d);
+      const k = dateKey2(dt);
+      const isH = hSet[k]?.type==='fixed';
+      const isWH = hSet[k]?.type==='weekend';
+      const isL = leaveSet.has(k);
+      const isLW = lwSet.has(k) && !isH && !isL;
+      const isSat = dt.getDay()===6, isSun = dt.getDay()===0;
+      const isWk = isSat||isSun;
+      const isToday = today.getFullYear()===2026&&today.getMonth()===m&&today.getDate()===d;
+
+      let cls = 'mc-day';
+      if (isH) cls += ' hday';
+      else if (isL) cls += ' leave-d';
+      else if (isLW) cls += ' lw-d';
+      else if (isWk) cls += ' wkend';
+      if (isToday) cls += ' today-d';
+
+      const title = isH ? hSet[k].name : isL ? 'Take leave' : isLW ? 'Long weekend' : isWH ? hSet[k].name+' (holiday on weekend)' : '';
+      html += `<div class="${cls}"${title?` title="${title.replace(/"/g,"'")}"`:''}>`;
+      html += d;
+      if (isH || isL) html += `<span style="display:block;font-size:7px;line-height:1;margin-top:1px;overflow:hidden;white-space:nowrap;max-width:28px">${isL?'off':''}</span>`;
+      html += `</div>`;
+    }
+
+    html += `</div></div></div>`;
+  }
+  calEl.innerHTML = html;
+}
+
+function renderPlannerDetail(stCode, hSet, sugs, selIdx) {
+  const el = document.getElementById(`lw-detail-${stCode}`);
+  if (!el) return;
+  if (selIdx === null || !sugs[selIdx]) { el.innerHTML = ''; return; }
+  const s = sugs[selIdx];
+  const n = s.totalDays;
+  const bcls = n>=6?'b-6':n===5?'b-5':n===4?'b-4':'b-3';
+  const hnames = s.holDays.map(d=>hSet[dateKey2(d)]?.name||'').filter(Boolean).join(', ');
+  const lnames = s.leaveDays.map(d=>fmtShort(d)).join(', ');
+  const wnames = s.wkDays.map(d=>fmtShort(d)).join(', ')||'None';
+  const stName = STATE_NAMES[stCode];
+  el.innerHTML = `<div class="detail-box">
+    <div class="db-title">${fmtShort(s.start)} – ${fmtShort(s.end)} &nbsp;<span class="sc-badge ${bcls}">${n}-day break</span></div>
+    <div class="db-row"><span class="db-lbl">Total days off</span><span class="db-val">${n} days</span></div>
+    <div class="db-row"><span class="db-lbl">Leave days to apply</span><span class="db-val">${s.leaveDays.length} day${s.leaveDays.length>1?'s':''} — ${lnames}</span></div>
+    <div class="db-row"><span class="db-lbl">Holidays</span><span class="db-val">${hnames}</span></div>
+    <div class="db-row"><span class="db-lbl">Weekend days</span><span class="db-val">${wnames}</span></div>
+    <div class="db-btn"><button class="slds-btn slds-btn-neutral" style="font-size:12px" onclick="sendPrompt('I am planning a long weekend from ${fmtShort(s.start)} to ${fmtShort(s.end)} (${n} days) in ${stName}, India. The holidays are: ${hnames}. I need to take ${s.leaveDays.length} leave day(s) on ${lnames}. Suggest how to make the most of this break — travel ideas from ${stName}, how to plan the leave application, and any tips.')">Plan this trip ↗</button></div>
+  </div>`;
+}
+
+// ── RENDER CONTENT ────────────────────────────────────
+function renderContent() {
+  const area = document.getElementById('content-area');
+  const query = searchText.toLowerCase();
+  const india = COUNTRIES.find(c => c.id === 'india');
+
+  // Search mode — India only, state-aware
+  if (query) {
+    area.innerHTML = '';
+    const view = (currentCountry === 'india') ? 'india-all' : currentCountry;
+    const stCode = view.replace('india-', '');
+    const searchStates = stCode === 'all' ? Object.keys(STATE_NAMES) : [stCode];
+    let totalMatches = 0;
+    let html = '';
+    searchStates.forEach(sc => {
+      const stData = getStateHolidays(sc);
+      const all = [];
+      (stData.fixed||[]).forEach(h => { if (matchHoliday(h, STATE_NAMES[sc], query)) all.push({...h, type:'fixed'}); });
+      (stData.optional||[]).forEach(h => { if (matchHoliday(h, STATE_NAMES[sc], query)) all.push({...h, type:'optional'}); });
+      (stData.weekend||[]).forEach(h => { if (matchHoliday(h, STATE_NAMES[sc], query)) all.push({...h, type:'weekend'}); });
+      const filtered = all.filter(h => currentFilter==='all' || h.type===currentFilter);
+      // Deduplicate across states by holiday name+date
+      const unique = filtered.filter((h,i,arr) => arr.findIndex(x=>x.holiday===h.holiday&&x.date===h.date)===i);
+      if (!unique.length) return;
+      totalMatches += unique.length;
+      html += `<div style="margin-bottom:22px">
+        ${stCode==='all' ? `<div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:8px;display:flex;align-items:center;gap:6px"><span>📍</span>${hl(STATE_NAMES[sc],query)}</div>` : ''}
+        <table class="holiday-table">
+          <thead><tr><th>#</th><th>Date</th><th>Holiday</th><th>Type</th></tr></thead>
+          <tbody>${unique.map((h,i) => `<tr>
+            <td class="sr-cell">${i+1}</td>
+            <td class="date-cell">${hl(h.date,query)} ${getDayChip(h.date)}</td>
+            <td class="holiday-name">${hl(h.holiday,query)}</td>
+            <td><span style="font-size:11px;padding:2px 7px;border-radius:4px;font-weight:600;background:${h.type==='fixed'?'#e8f5ee':h.type==='optional'?'#e8f0ff':'#fef0ef'};color:${h.type==='fixed'?'#1a6b4a':h.type==='optional'?'#4a2d8a':'#c0392b'}">${h.type}</span></td>
+          </tr>`).join('')}</tbody>
+        </table>
+      </div>`;
+    });
+    area.innerHTML = html || `<div class="empty-state"><div class="big">🔍</div><p>No holidays found for "<strong>${query}</strong>"</p></div>`;
+    document.getElementById('result-count').textContent = totalMatches ? `${totalMatches} result${totalMatches>1?'s':''}` : '';
+    return;
+  }
+
+  document.getElementById('result-count').textContent = '';
+  area.innerHTML = '';
+
+  // Normal view — India only
+  const div = document.createElement('div');
+  div.className = 'country-section visible';
+  div.id = 'section-india-state';
+
+  const view = (currentCountry === 'india') ? 'india-all' : currentCountry;
+  const stCode = view.replace('india-', '');
+
+  if (stCode === 'all') {
+    div.innerHTML = renderIndiaOverview(india);
+  } else {
+    div.innerHTML = renderIndiaState(stCode);
+  }
+  area.appendChild(div);
+  if (stCode !== 'all') setTimeout(() => renderPlanner(stCode), 0);
+}
+
+function getMatchingHolidays(c, q) {
+  const all = [];
+  (c.fixed||[]).forEach(h => { if (matchHoliday(h, c.name, q)) all.push({...h, type:'fixed'}); });
+  (c.optional||[]).forEach(h => { if (matchHoliday(h, c.name, q)) all.push({...h, type:'optional'}); });
+  (c.weekend||[]).forEach(h => { if (matchHoliday(h, c.name, q)) all.push({...h, type:'weekend'}); });
+  return all;
+}
+function matchHoliday(h, country, q) {
+  return h.holiday.toLowerCase().includes(q) || h.date.toLowerCase().includes(q) || country.toLowerCase().includes(q);
+}
+function hl(text, q) {
+  if (!q) return text;
+  const re = new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi');
+  return text.replace(re, '<span class="hl">$1</span>');
+}
+
+function renderCountrySearch(c, matches, q) {
+  const fixed = matches.filter(h => h.type === 'fixed' && (currentFilter === 'all' || currentFilter === 'fixed'));
+  const optional = matches.filter(h => h.type === 'optional' && (currentFilter === 'all' || currentFilter === 'optional'));
+  const weekend = matches.filter(h => h.type === 'weekend' && (currentFilter === 'all' || currentFilter === 'weekend'));
+  const allFiltered = [...fixed, ...optional, ...weekend];
+  if (allFiltered.length === 0) return '';
+  return `<div style="margin-bottom:32px">
+    <div style="font-size:20px;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:8px">
+      <span>${c.flag}</span><span>${hl(c.name,q)}</span>
+      <span style="font-size:13px;color:var(--muted);font-weight:400">${allFiltered.length} match${allFiltered.length>1?'es':''}</span>
+    </div>
+    ${renderHolidayTableRows(allFiltered, q)}
+  </div>`;
+}
+function renderHolidayTableRows(rows, q='') {
+  return `<table class="holiday-table">
+    <thead><tr><th>#</th><th>Date</th><th>Holiday</th><th>Type</th></tr></thead>
+    <tbody>${rows.map((h,i) => `<tr>
+      <td class="sr-cell">${i+1}</td>
+      <td class="date-cell">${hl(h.date,q)} ${getDayChip(h.date)}</td>
+      <td class="holiday-name">${hl(h.holiday,q)}${h.tentative?'<span class="tentative-tag">Tentative</span>':''}</td>
+      <td><span style="font-size:11px;padding:2px 7px;border-radius:4px;font-weight:600;background:${h.type==='fixed'?'#e8f5ee':h.type==='optional'?'#e8f0ff':'#fef0ef'};color:${h.type==='fixed'?'#1a6b4a':h.type==='optional'?'#4a2d8a':'#c0392b'}">${h.type}</span></td>
+    </tr>`).join('')}</tbody>
+  </table>`;
+}
+
+function getDayChip(dateStr) {
+  const day = dateStr.split(',')[0].toLowerCase().slice(0,3);
+  const map = {mon:'mon',tue:'tue',wed:'wed',thu:'thu',fri:'fri',sat:'sat',sun:'sun'};
+  const cls = map[day] || '';
+  const labels = {mon:'Mon',tue:'Tue',wed:'Wed',thu:'Thu',fri:'Fri',sat:'Sat',sun:'Sun'};
+  return `<span class="day-chip ${cls}">${labels[day]||''}</span>`;
+}
+
+function renderIndiaOverview(c) {
+  // The existing all-states matrix view
+  return renderCountry(c);
+}
+
+function renderCountry(c) {
+  const showFixed = currentFilter === 'all' || currentFilter === 'fixed';
+  const showOptional = currentFilter === 'all' || currentFilter === 'optional';
+  const showWeekend = currentFilter === 'all' || currentFilter === 'weekend';
+
+  const fixedCount = (c.fixed||[]).length;
+  const optCount = (c.optional||[]).length;
+  const wkCount = (c.weekend||[]).length;
+
+  // For India, badge shows per-state range
+  const badge = c.indiaStates
+    ? '12–13 holidays per state'
+    : `${getTotalCount(c)} holidays`;
+
+  let html = `<div class="country-header">
+    <div class="country-title-block">
+      <div class="country-flag-lg">${c.flag}</div>
+      <div>
+        <div class="country-name">${c.name}</div>
+        <div class="country-subtitle">Azentio Holiday List · 2026</div>
+      </div>
+    </div>
+    <div class="holiday-count-badge">${badge}</div>
+  </div>`;
+
+  // India: state selector tabs + today banner
+  if (c.indiaStates) {
+    html += stateTabBar('all');
+    // For overview, show upcoming across all states (use MH as representative)
+    const mhData = getStateHolidays('MH');
+    const allFixed = [...mhData.fixed, ...mhData.optional].sort((a,b) => parseDateStr(a.date) - parseDateStr(b.date));
+    html += buildUpcomingBanner(allFixed);
+  }
+
+  html += `<div class="stats-row">
+    ${c.indiaStates
+      ? `<div class="stat-chip green"><span class="num">10–11</span><span>Fixed per state</span></div>
+         <div class="stat-chip blue"><span class="num">2</span><span>Floating (pick 2)</span></div>
+         <div class="stat-chip orange"><span class="num">5 states</span><span>covered</span></div>`
+      : `${fixedCount ? `<div class="stat-chip green"><span class="num">${fixedCount}</span><span>Fixed holidays</span></div>` : ''}
+         ${optCount ? `<div class="stat-chip blue"><span class="num">${optCount}</span><span>${c.optionalNote ? 'Optional (choose 5)' : 'Floating / Optional'}</span></div>` : ''}
+         ${wkCount ? `<div class="stat-chip orange"><span class="num">${wkCount}</span><span>Fall on weekend</span></div>` : ''}`
+    }
+  </div>`;
+
+  // Fixed holidays
+  if (showFixed && c.fixed && c.fixed.length) {
+    if (c.indiaStates) {
+      html += renderIndiaStateTable(c.fixed, 'Fixed Holidays');
+    } else {
+      html += `<div class="section-label">Fixed Public Holidays</div>
+      <table class="holiday-table">
+        <thead><tr><th>#</th><th>Date</th><th>Holiday</th></tr></thead>
+        <tbody>${c.fixed.map((h,i) => `<tr>
+          <td class="sr-cell">${i+1}</td>
+          <td class="date-cell">${h.date} ${getDayChip(h.date)}</td>
+          <td class="holiday-name">${h.holiday}${h.tentative ? '<span class="tentative-tag">Tentative</span>' : ''}</td>
+        </tr>`).join('')}</tbody>
+      </table>`;
+    }
+  }
+
+  // Optional holidays
+  if (showOptional && c.optional && c.optional.length) {
+    if (c.indiaStates) {
+      html += renderIndiaStateTable(c.optional, 'Floating / Optional Holidays', true);
+    } else {
+      html += `<div class="optional-section">
+        <div class="section-label" style="margin:12px 16px 8px">Optional / Floating Holidays${c.optionalNote ? ` <span style="font-size:11px;font-weight:400;color:#4a2d8a;text-transform:none;letter-spacing:0">(${c.optionalNote})</span>` : ''}</div>
+        <table class="holiday-table optional-tbl">
+          <thead><tr><th>#</th><th>Date</th><th>Holiday</th></tr></thead>
+          <tbody>${c.optional.map((h,i) => `<tr>
+            <td class="sr-cell">${i+1}</td>
+            <td class="date-cell">${h.date} ${getDayChip(h.date)}</td>
+            <td class="holiday-name">${h.holiday}${h.tentative ? '<span class="tentative-tag">Tentative</span>' : ''}</td>
+          </tr>`).join('')}</tbody>
+        </table>
+      </div>`;
+    }
+  }
+
+  // Weekend holidays
+  if (showWeekend && c.weekend && c.weekend.length) {
+    if (c.indiaStates) {
+      html += renderIndiaStateTable(c.weekend, 'Holidays Falling on Weekend');
+    } else {
+      html += `<div class="weekend-section">
+        <div class="section-label" style="margin:12px 16px 8px;color:#c0392b">Holidays Falling on Weekend</div>
+        <table class="holiday-table weekend-tbl">
+          <thead><tr><th>#</th><th>Date</th><th>Holiday</th></tr></thead>
+          <tbody>${c.weekend.map((h,i) => `<tr>
+            <td class="sr-cell">${i+1}</td>
+            <td class="date-cell">${h.date} ${getDayChip(h.date)}</td>
+            <td class="holiday-name">${h.holiday}${h.tentative ? '<span class="tentative-tag">Tentative</span>' : ''}</td>
+          </tr>`).join('')}</tbody>
+        </table>
+      </div>`;
+    }
+  }
+
+  // India state totals
+  if (c.indiaStates && c.stateTotals) {
+    html += `<div style="margin:12px 0 8px;padding:10px 14px;background:#f9f8f5;border-radius:8px;border:1px solid var(--border);display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+      <span style="font-size:11px;font-weight:600;color:var(--muted)">TOTAL DAYS:</span>
+      ${Object.entries(c.stateTotals).map(([s,n]) => `<span style="font-size:13px"><strong>${STATE_NAMES[s]}</strong> <span style="color:var(--accent);font-weight:700">${n}</span></span>`).join(' &nbsp;·&nbsp; ')}
+    </div>`;
+  }
+
+  // Notes
+  if (c.notes && c.notes.length) {
+    html += `<div class="notes-block">${c.notes.map(n=>`<p>— ${n}</p>`).join('')}</div>`;
+  }
+
+  return html;
+}
+
+function renderIndiaStateTable(holidays, label, isOptional=false) {
+  const states = ['MH','KL','TN','KA','TG'];
+  const sectionClass = isOptional ? 'optional-section' : '';
+  const labelColor = label.includes('Weekend') ? 'color:#c0392b' : '';
+  return `<div class="${sectionClass}" style="${isOptional?'':''}">
+    <div class="section-label" style="margin:${sectionClass?'12px 16px 8px':'16px 0 10px'};${labelColor}">${label}</div>
+    <div style="overflow-x:auto">
+    <table class="holiday-table" style="min-width:640px">
+      <thead><tr class="state-header-row">
+        <th>#</th><th>Date</th><th>Holiday</th>
+        ${states.map(s=>`<th style="text-align:center;min-width:86px">${STATE_NAMES[s]}</th>`).join('')}
+      </tr></thead>
+      <tbody>${holidays.map((h,i) => `<tr>
+        <td class="sr-cell">${i+1}</td>
+        <td class="date-cell">${h.date} ${getDayChip(h.date)}</td>
+        <td class="holiday-name">${h.holiday}${h.tentative?'<span class="tentative-tag">Tentative</span>':''}</td>
+        ${states.map(s => `<td style="text-align:center">${(h.states||[]).includes(s) ? '<span style="color:var(--accent);font-size:16px">✓</span>' : '<span style="color:#e0ddd7">—</span>'}</td>`).join('')}
+      </tr>`).join('')}</tbody>
+    </table>
+    </div>
+  </div>`;
+}
+
+// ── CONTROLS ──────────────────────────────────────────
+function selectCountry(id) {
+  currentCountry = id;
+  // For India state sub-views, re-render content directly
+  if (id.startsWith('india')) {
+    renderContent();
+    renderNav();
+    return;
+  }
+  document.querySelectorAll('.country-section').forEach(el => {
+    el.classList.toggle('visible', el.id === `section-${id}`);
+  });
+  document.querySelectorAll('.nav-country').forEach(el => {
+    el.classList.toggle('active', el.dataset.id === id);
+  });
+  renderNav();
+}
+
+function setFilter(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderContent();
+  renderNav();
+}
+
+document.getElementById('search-input').addEventListener('input', function() {
+  searchText = this.value.trim();
+  renderNav();
+  renderContent();
+});
+
+// ── TODAY ─────────────────────────────────────────────
+const now = new Date();
+document.getElementById('today-display').textContent = now.toLocaleDateString('en-GB', {weekday:'short',day:'numeric',month:'short',year:'numeric'});
+
+// ── INIT ──────────────────────────────────────────────
+renderNav();
+renderContent();
+</script>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────────
+const COUNTRIES = [
+  {
+    id: 'india', name: 'India', flag: '🇮🇳', region: 'asia',
+    notes: ['Employees working at the client site will observe the client\'s Holiday List.','Employees working in locations other than those specified above will follow leave of the location closest/mapped to them.'],
+    fixed: [
+      { date: 'Thu, 1 Jan', holiday: 'New Year\'s Day', states: ['MH','KL','TN','KA','TG'] },
+      { date: 'Thu, 15 Jan', holiday: 'Pongal / Makara Sankranti Festival', states: ['TN','KA','TG'] },
+      { date: 'Mon, 26 Jan', holiday: 'Republic Day', states: ['MH','KL','TN','KA','TG'] },
+      { date: 'Tue, 3 Mar', holiday: 'Holi (Second Day)', states: ['MH'] },
+      { date: 'Thu, 19 Mar', holiday: 'Ugadi Festival', states: ['TG'] },
+      { date: 'Fri, 3 Apr', holiday: 'Good Friday', states: ['MH','KL','TN','KA','TG'] },
+      { date: 'Tue, 14 Apr', holiday: 'Tamil New Year', states: ['TN'] },
+      { date: 'Wed, 15 Apr', holiday: 'Vishu', states: ['KL'] },
+      { date: 'Fri, 1 May', holiday: 'May Day / Maharashtra Din', states: ['MH','KL','TN','KA','TG'] },
+      { date: 'Wed, 27 May', holiday: 'Id-ul-Ad\'ha (Bakrid)', states: ['KL'] },
+      { date: 'Tue, 25 Aug', holiday: 'First Onam / Milad-i-Sherif (Birthday of Prophet)', states: ['KL'] },
+      { date: 'Wed, 26 Aug', holiday: 'Thiruvonam', states: ['KL'] },
+      { date: 'Mon, 14 Sep', holiday: 'Vinayak Chathurthi', states: ['MH','TN','KA','TG'] },
+      { date: 'Fri, 2 Oct', holiday: 'Gandhi Jayanthi', states: ['MH','KL','TN','KA','TG'] },
+      { date: 'Tue, 20 Oct', holiday: 'Dasara / Vijaya Dashmi / Mahanavami / Ayudhapooja', states: ['MH','KL','TN','KA','TG'] },
+      { date: 'Tue, 10 Nov', holiday: 'Balipadyami / Deepavali (Bali Pratipada)', states: ['MH','KA'] },
+      { date: 'Fri, 25 Dec', holiday: 'Christmas', states: ['MH','KL','TN','KA','TG'] },
+    ],
+    optional: [
+      { date: 'Fri, 16 Jan', holiday: 'Thiruvalluvar Day' },
+      { date: 'Thu, 19 Mar', holiday: 'Gudhi Padwa / Telugu New Year\'s Day / Ugadi Festival' },
+      { date: 'Fri, 20 Mar', holiday: 'Id-ul-Fitr (Ramzan)' },
+      { date: 'Tue, 31 Mar', holiday: 'Mahaveer Jayanthi' },
+      { date: 'Tue, 14 Apr', holiday: 'Tamil New Year' },
+      { date: 'Wed, 15 Apr', holiday: 'Vishu' },
+      { date: 'Mon, 20 Apr', holiday: 'Basava Jayanthi, Akshaya Tritiya' },
+      { date: 'Wed, 27 May', holiday: 'Id-ul-Ad\'ha (Bakrid)' },
+      { date: 'Thu, 28 May', holiday: 'Bakrid (Idul Azha)' },
+      { date: 'Fri, 26 Jun', holiday: 'Muharram (Yaom-E-Shahadath)' },
+      { date: 'Wed, 12 Aug', holiday: 'Karkadaka Vavu' },
+      { date: 'Wed, 26 Aug', holiday: 'Milad-un-Nabi / Eid-Milad / Thiruvonam' },
+      { date: 'Thu, 27 Aug', holiday: 'Third Onam' },
+      { date: 'Fri, 28 Aug', holiday: 'Fourth Onam / Sree Narayana Guru Jayanthi / Ayyankali Jayanthi' },
+      { date: 'Fri, 4 Sep', holiday: 'Krishna Jayanthi' },
+      { date: 'Mon, 14 Sep', holiday: 'Vinayak Chathurthi' },
+      { date: 'Wed, 21 Oct', holiday: 'Vijayadasami' },
+      { date: 'Tue, 10 Nov', holiday: 'Balipadyami / Deepavali (Bali Pratipada)' },
+      { date: 'Fri, 27 Nov', holiday: 'Kanakadasa Jayanthi' },
+    ],
+    weekend: [
+      { date: 'Sat, 17 Jan', holiday: 'Uzhavar Thirunal', states: ['TN'] },
+      { date: 'Sun, 1 Feb', holiday: 'Thai Poosam', states: ['TN'] },
+      { date: 'Sun, 15 Feb', holiday: 'Mahashivratri', states: ['MH','KA','TG'] },
+      { date: 'Sat, 21 Mar', holiday: 'Ramzan-Id (Id-Ul-Fitra)', states: ['MH','KL','TN','KA','TG'] },
+      { date: 'Sun, 22 Mar', holiday: 'Following Day Of Ramzan', states: ['TG'] },
+      { date: 'Sun, 5 Apr', holiday: 'Easter', states: ['KL','TG'] },
+      { date: 'Sat, 15 Aug', holiday: 'Independence Day', states: ['MH','KL','TN','KA','TG'] },
+      { date: 'Sat, 10 Oct', holiday: 'Mahalaya Amavasye', states: ['KA'] },
+      { date: 'Sun, 18 Oct', holiday: 'Saddula BathuKamma', states: ['TG'] },
+      { date: 'Sun, 25 Oct', holiday: 'Maharshi Valmiki Jayanthi', states: ['KA'] },
+      { date: 'Sun, 1 Nov', holiday: 'Kannada Rajyothsava', states: ['KA'] },
+      { date: 'Sun, 8 Nov', holiday: 'Deepavali (Laxmi Pujan)', states: ['MH','KL','TN','KA','TG'] },
+      { date: 'Sat, 26 Dec', holiday: 'Following Day Of Christmas (Boxing Day)', states: ['TG'] },
+    ],
+    stateTotals: {MH:12,KL:13,TN:12,KA:12,TG:12},
+    indiaStates: true,
+  },
+  {
+    id: 'malaysia', name: 'Malaysia', flag: '🇲🇾', region: 'asia',
+    notes: ['All Islamic holidays are subject to confirmation by the respective governments after moon-sighting.'],
+    fixed: [
+      { date: 'Thu, 1 Jan', holiday: 'New Year\'s Day' },
+      { date: 'Mon, 2 Feb', holiday: 'Thai Poosam Day / Federal Territory Day' },
+      { date: 'Tue, 3 Feb', holiday: 'Thai Poosam Day' },
+      { date: 'Tue, 17 Feb', holiday: 'Chinese New Year' },
+      { date: 'Wed, 18 Feb', holiday: 'Chinese New Year' },
+      { date: 'Mon, 23 Mar', holiday: 'Hari Raya Puasa', tentative: true },
+      { date: 'Fri, 1 May', holiday: 'Labour Day' },
+      { date: 'Wed, 27 May', holiday: 'Hari Raya Qurban', tentative: true },
+      { date: 'Mon, 1 Jun', holiday: 'Agong\'s Birthday' },
+      { date: 'Tue, 2 Jun', holiday: 'Wesak Day' },
+      { date: 'Wed, 17 Jun', holiday: 'Awal Muharam' },
+      { date: 'Tue, 25 Aug', holiday: 'Nabi Muhammad Birthday (Maulidur Rasul)' },
+      { date: 'Mon, 31 Aug', holiday: 'National Day' },
+      { date: 'Wed, 16 Sep', holiday: 'Malaysia Day' },
+      { date: 'Mon, 9 Nov', holiday: 'Diwali', tentative: true },
+      { date: 'Fri, 25 Dec', holiday: 'Christmas' },
+    ],
+    weekend: [
+      { date: 'Sun, 1 Feb', holiday: 'Thai Poosam Day / Federal Territory Day' },
+      { date: 'Sat, 7 Mar', holiday: 'Nuzul Al-Quran Day' },
+      { date: 'Sat, 21 Mar', holiday: 'Hari Raya Puasa', tentative: true },
+      { date: 'Sun, 22 Mar', holiday: 'Hari Raya Puasa', tentative: true },
+      { date: 'Sun, 31 May', holiday: 'Wesak Day' },
+      { date: 'Sun, 8 Nov', holiday: 'Diwali', tentative: true },
+    ],
+  },
+  {
+    id: 'singapore', name: 'Singapore', flag: '🇸🇬', region: 'asia',
+    notes: ['Special/Additional Holidays if any, announced by the Government will be notified accordingly.'],
+    fixed: [
+      { date: 'Thu, 1 Jan', holiday: 'New Year\'s Day' },
+      { date: 'Tue, 17 Feb', holiday: 'Chinese New Year' },
+      { date: 'Wed, 18 Feb', holiday: 'Chinese New Year' },
+      { date: 'Fri, 3 Apr', holiday: 'Good Friday' },
+      { date: 'Fri, 1 May', holiday: 'Labour Day' },
+      { date: 'Wed, 27 May', holiday: 'Hari Raya Haji' },
+      { date: 'Mon, 1 Jun', holiday: 'Vesak Day' },
+      { date: 'Mon, 10 Aug', holiday: 'National Day' },
+      { date: 'Mon, 9 Nov', holiday: 'Deepavali' },
+      { date: 'Fri, 25 Dec', holiday: 'Christmas Day' },
+    ],
+    weekend: [
+      { date: 'Sat, 21 Mar', holiday: 'Hari Raya Puasa' },
+      { date: 'Sun, 31 May', holiday: 'Vesak Day' },
+      { date: 'Sun, 9 Aug', holiday: 'National Day' },
+      { date: 'Sun, 8 Nov', holiday: 'Deepavali' },
+    ],
+  },
+  {
+    id: 'indonesia', name: 'Indonesia', flag: '🇮🇩', region: 'asia',
+    notes: ['All Islamic holidays are subject to confirmation by the respective governments after moon-sighting.','Special/Additional Holidays if any, announced by the Government will be notified accordingly.'],
+    fixed: [
+      { date: 'Thu, 1 Jan', holiday: 'New Year\'s Day' },
+      { date: 'Fri, 16 Jan', holiday: 'Isra Mi\'raj of the Prophet Muhammad SAW' },
+      { date: 'Tue, 17 Feb', holiday: 'Chinese New Year' },
+      { date: 'Thu, 19 Mar', holiday: 'Bali Hindu New Year' },
+      { date: 'Fri, 3 Apr', holiday: 'Good Friday' },
+      { date: 'Fri, 1 May', holiday: 'Labour Day' },
+      { date: 'Thu, 14 May', holiday: 'Ascension Day of Jesus Christ' },
+      { date: 'Wed, 27 May', holiday: 'Eid Al-Adha' },
+      { date: 'Mon, 1 Jun', holiday: 'Pancasila Day' },
+      { date: 'Tue, 16 Jun', holiday: 'Islamic New Year' },
+      { date: 'Mon, 17 Aug', holiday: 'Independence Day' },
+      { date: 'Tue, 25 Aug', holiday: 'Mawlid of Prophet Muhammad SAW' },
+      { date: 'Fri, 25 Dec', holiday: 'Christmas' },
+    ],
+    weekend: [
+      { date: 'Sat, 21 Mar', holiday: 'Eid Al-Fitr' },
+      { date: 'Sun, 22 Mar', holiday: 'Eid Al-Fitr' },
+      { date: 'Sun, 5 Apr', holiday: 'Easter Sunday' },
+      { date: 'Sun, 31 May', holiday: 'Vesak Day' },
+    ],
+  },
+  {
+    id: 'vietnam', name: 'Vietnam', flag: '🇻🇳', region: 'asia',
+    notes: ['Special/Additional Holidays if any, announced by the Government will be notified accordingly.'],
+    fixed: [
+      { date: 'Thu, 1 Jan', holiday: 'New Year Holiday' },
+      { date: 'Mon, 16 Feb', holiday: 'Vietnamese New Year\'s Eve' },
+      { date: 'Tue, 17 Feb', holiday: 'Vietnamese New Year (Tết)' },
+      { date: 'Wed, 18 Feb', holiday: 'Vietnamese New Year (Tết)' },
+      { date: 'Thu, 19 Feb', holiday: 'Vietnamese New Year (Tết)' },
+      { date: 'Fri, 20 Feb', holiday: 'Vietnamese New Year (Tết)' },
+      { date: 'Sun, 26 Apr', holiday: 'Hung Kings\' Commemoration Day' },
+      { date: 'Mon, 27 Apr', holiday: 'Hung Kings\' Commemoration Day Holiday' },
+      { date: 'Thu, 30 Apr', holiday: 'Liberation Day / Reunification Day' },
+      { date: 'Fri, 1 May', holiday: 'Labour Day' },
+      { date: 'Mon, 31 Aug', holiday: 'National Day Holiday' },
+      { date: 'Tue, 1 Sep', holiday: 'National Day Holiday' },
+      { date: 'Wed, 2 Sep', holiday: 'National Day' },
+    ],
+  },
+  {
+    id: 'thailand', name: 'Thailand', flag: '🇹🇭', region: 'asia',
+    notes: ['Special/Additional Holidays if any, announced by the Government will be notified accordingly.'],
+    fixed: [
+      { date: 'Thu, 1 Jan', holiday: 'New Year\'s Day' },
+      { date: 'Fri, 2 Jan', holiday: 'Additional Special Holiday' },
+      { date: 'Tue, 3 Mar', holiday: 'Makha Bucha Day' },
+      { date: 'Mon, 6 Apr', holiday: 'Substitution for Chakri Memorial Day' },
+      { date: 'Mon, 13 Apr', holiday: 'Songkran Festival' },
+      { date: 'Tue, 14 Apr', holiday: 'Songkran Festival' },
+      { date: 'Wed, 15 Apr', holiday: 'Songkran Festival' },
+      { date: 'Fri, 1 May', holiday: 'Labour Day' },
+      { date: 'Mon, 4 May', holiday: 'Substitution for Coronation Day' },
+      { date: 'Mon, 1 Jun', holiday: 'Substitution for Visakha Bucha Day' },
+      { date: 'Wed, 3 Jun', holiday: 'H.M. Queen Suthida\'s Birthday' },
+      { date: 'Tue, 28 Jul', holiday: 'H.M. King Vajiralongkorn\'s Birthday' },
+      { date: 'Wed, 29 Jul', holiday: 'Asarnha Bucha Day' },
+      { date: 'Wed, 12 Aug', holiday: 'H.M. Queen Sirikit\'s Birthday / Mother\'s Day' },
+      { date: 'Tue, 13 Oct', holiday: 'H.M. King Bhumibol Memorial Day' },
+      { date: 'Fri, 23 Oct', holiday: 'H.M. King Chulalongkorn Memorial Day' },
+      { date: 'Mon, 7 Dec', holiday: 'H.M. King Bhumibol Birthday / National Day / Father\'s Day' },
+      { date: 'Thu, 10 Dec', holiday: 'Constitution Day' },
+      { date: 'Thu, 31 Dec', holiday: 'New Year\'s Eve' },
+    ],
+    weekend: [
+      { date: 'Sun, 31 May', holiday: 'Substitution for Visakha Bucha Day' },
+      { date: 'Sat, 5 Dec', holiday: 'H.M. King Bhumibol Birthday / National Day / Father\'s Day' },
+    ],
+  },
+  {
+    id: 'philippines', name: 'Philippines', flag: '🇵🇭', region: 'asia',
+    notes: ['Special/Additional Holidays if any, announced by the Government will be notified accordingly.'],
+    fixed: [
+      { date: 'Thu, 1 Jan', holiday: 'New Year\'s Day' },
+      { date: 'Tue, 17 Feb', holiday: 'Chinese New Year' },
+      { date: 'Thu, 2 Apr', holiday: 'Maundy Thursday' },
+      { date: 'Fri, 3 Apr', holiday: 'Good Friday' },
+      { date: 'Thu, 9 Apr', holiday: 'Araw ng Kagitingan' },
+      { date: 'Fri, 1 May', holiday: 'Labour Day' },
+      { date: 'Fri, 12 Jun', holiday: 'Independence Day' },
+      { date: 'Fri, 21 Aug', holiday: 'Ninoy Aquino Day' },
+      { date: 'Mon, 31 Aug', holiday: 'National Heroes Day' },
+      { date: 'Mon, 2 Nov', holiday: 'All Saints\' Day' },
+      { date: 'Mon, 30 Nov', holiday: 'Bonifacio Day' },
+      { date: 'Tue, 8 Dec', holiday: 'Feast of the Immaculate Conception of Mary' },
+      { date: 'Thu, 24 Dec', holiday: 'Christmas Eve' },
+      { date: 'Fri, 25 Dec', holiday: 'Christmas Day' },
+      { date: 'Wed, 30 Dec', holiday: 'Rizal Day' },
+      { date: 'Thu, 31 Dec', holiday: 'New Year\'s Eve' },
+    ],
+    weekend: [
+      { date: 'Sat, 4 Apr', holiday: 'Black Saturday' },
+      { date: 'Sun, 1 Nov', holiday: 'All Saint\'s Day Eve' },
+    ],
+  },
+  {
+    id: 'uae', name: 'UAE', flag: '🇦🇪', region: 'middle-east',
+    notes: ['All Islamic holidays are subject to confirmation by the respective governments after moon-sighting.'],
+    fixed: [
+      { date: 'Thu, 1 Jan', holiday: 'New Year Day' },
+      { date: 'Fri, 20 Mar', holiday: 'Eid Al Fitr', tentative: true },
+      { date: 'Tue, 26 May', holiday: 'Arafat Day' },
+      { date: 'Wed, 27 May', holiday: 'Eid Al Adha', tentative: true },
+      { date: 'Thu, 28 May', holiday: 'Eid Al Adha', tentative: true },
+      { date: 'Fri, 29 May', holiday: 'Eid Al Adha', tentative: true },
+      { date: 'Mon, 15 Jun', holiday: 'Islamic New Year', tentative: true },
+      { date: 'Wed, 26 Aug', holiday: 'The Prophet\'s Birthday', tentative: true },
+      { date: 'Wed, 2 Dec', holiday: 'UAE National Day' },
+      { date: 'Thu, 3 Dec', holiday: 'UAE National Day' },
+    ],
+    weekend: [
+      { date: 'Sat, 21 Mar', holiday: 'Eid Al Fitr', tentative: true },
+      { date: 'Sun, 22 Mar', holiday: 'Eid Al Fitr', tentative: true },
+    ],
+  },
+  {
+    id: 'ksa', name: 'KSA', flag: '🇸🇦', region: 'middle-east',
+    notes: ['All Islamic holidays are subject to confirmation by the respective governments after moon-sighting.','For Mandatory holidays falling on a weekend, the next working day will be considered as a holiday based on the government notification.'],
+    fixed: [
+      { date: 'Sun, 22 Feb', holiday: 'Founding Day' },
+      { date: 'Sun, 22 Mar', holiday: 'Eid Al Fitr', tentative: true },
+      { date: 'Tue, 26 May', holiday: 'Arafat Day' },
+      { date: 'Wed, 27 May', holiday: 'Eid Al Adha', tentative: true },
+      { date: 'Thu, 28 May', holiday: 'Eid Al Adha', tentative: true },
+      { date: 'Wed, 23 Sep', holiday: 'KSA National Day' },
+    ],
+    weekend: [
+      { date: 'Fri, 20 Mar', holiday: 'Eid Al Fitr', tentative: true },
+      { date: 'Sat, 21 Mar', holiday: 'Eid Al Fitr', tentative: true },
+      { date: 'Fri, 29 May', holiday: 'Eid Al Adha', tentative: true },
+    ],
+  },
+  {
+    id: 'bahrain', name: 'Bahrain', flag: '🇧🇭', region: 'middle-east',
+    notes: ['All Islamic holidays are subject to confirmation by the respective governments after moon-sighting.','For Mandatory holidays falling on a weekend, the next working day will be considered as a holiday.'],
+    fixed: [
+      { date: 'Thu, 1 Jan', holiday: 'New Year\'s Day' },
+      { date: 'Sun, 22 Mar', holiday: 'Eid Al Fitr', tentative: true },
+      { date: 'Tue, 26 May', holiday: 'Arafat Day' },
+      { date: 'Wed, 27 May', holiday: 'Eid Al Adha', tentative: true },
+      { date: 'Thu, 28 May', holiday: 'Eid Al Adha', tentative: true },
+      { date: 'Wed, 17 Jun', holiday: 'Islamic New Year / Muharram' },
+      { date: 'Wed, 26 Aug', holiday: 'The Prophet\'s Birthday', tentative: true },
+      { date: 'Wed, 16 Dec', holiday: 'Bahrain National Day' },
+      { date: 'Thu, 17 Dec', holiday: 'Bahrain National Day' },
+    ],
+    weekend: [
+      { date: 'Fri, 20 Mar', holiday: 'Eid Al Fitr', tentative: true },
+      { date: 'Sat, 21 Mar', holiday: 'Eid Al Fitr', tentative: true },
+      { date: 'Fri, 1 May', holiday: 'Labour / May Day' },
+      { date: 'Fri, 29 May', holiday: 'Eid Al Adha', tentative: true },
+      { date: 'Fri, 26 Jun', holiday: 'Ashura' },
+      { date: 'Sat, 27 Jun', holiday: 'Ashura' },
+    ],
+  },
+  {
+    id: 'kuwait', name: 'Kuwait', flag: '🇰🇼', region: 'middle-east',
+    notes: ['All Islamic holidays are subject to confirmation by the respective governments after moon-sighting.','For Mandatory holidays falling on a weekend, the next working day will be considered as a holiday.'],
+    fixed: [
+      { date: 'Thu, 1 Jan', holiday: 'New Year\'s Day' },
+      { date: 'Sun, 18 Jan', holiday: 'Isra and Miraj' },
+      { date: 'Wed, 25 Feb', holiday: 'National Day' },
+      { date: 'Thu, 26 Feb', holiday: 'Liberation Day' },
+      { date: 'Sun, 22 Mar', holiday: 'Eid Al Fitr', tentative: true },
+      { date: 'Tue, 26 May', holiday: 'Arafat Day' },
+      { date: 'Wed, 27 May', holiday: 'Eid Al Adha', tentative: true },
+      { date: 'Thu, 28 May', holiday: 'Eid Al Adha', tentative: true },
+      { date: 'Tue, 16 Jun', holiday: 'Islamic New Year' },
+      { date: 'Thu, 27 Aug', holiday: 'The Prophet\'s Birthday', tentative: true },
+    ],
+    weekend: [
+      { date: 'Fri, 20 Mar', holiday: 'Eid Al Fitr', tentative: true },
+      { date: 'Sat, 21 Mar', holiday: 'Eid Al Fitr', tentative: true },
+      { date: 'Fri, 29 May', holiday: 'Eid Al Adha', tentative: true },
+    ],
+  },
+  {
+    id: 'jordan', name: 'Jordan', flag: '🇯🇴', region: 'middle-east',
+    notes: ['All Islamic holidays are subject to confirmation by the respective governments after moon-sighting.'],
+    fixed: [
+      { date: 'Thu, 1 Jan', holiday: 'New Year Holiday' },
+      { date: 'Thu, 19 Mar', holiday: 'Eid Al Fitr', tentative: true },
+      { date: 'Sun, 22 Mar', holiday: 'Eid Al Fitr', tentative: true },
+      { date: 'Mon, 25 May', holiday: 'Independence Day' },
+      { date: 'Tue, 26 May', holiday: 'Arafat Day' },
+      { date: 'Wed, 27 May', holiday: 'Eid Al Adha', tentative: true },
+      { date: 'Thu, 28 May', holiday: 'Eid Al Adha', tentative: true },
+      { date: 'Tue, 16 Jun', holiday: 'Muharram / New Year' },
+      { date: 'Tue, 25 Aug', holiday: 'The Prophet\'s Birthday', tentative: true },
+      { date: 'Fri, 25 Dec', holiday: 'Christmas Day' },
+    ],
+    weekend: [
+      { date: 'Fri, 20 Mar', holiday: 'Eid Al Fitr', tentative: true },
+      { date: 'Sat, 21 Mar', holiday: 'Eid Al Fitr', tentative: true },
+      { date: 'Fri, 1 May', holiday: 'Workers\'s Day' },
+      { date: 'Fri, 29 May', holiday: 'Eid Al Adha', tentative: true },
+      { date: 'Sat, 30 May', holiday: 'Eid Al Adha', tentative: true },
+    ],
+  },
+  {
+    id: 'iraq', name: 'Iraq', flag: '🇮🇶', region: 'middle-east',
+    notes: ['All Islamic holidays are subject to confirmation by the respective governments after moon-sighting.'],
+    fixed: [
+      { date: 'Thu, 1 Jan', holiday: 'New Year\'s Day' },
+      { date: 'Tue, 6 Jan', holiday: 'Army Day' },
+      { date: 'Thu, 15 Jan', holiday: 'Martyrdom Anniversary of Iman Musa ibn Ja\'far al Kadhim' },
+      { date: 'Mon, 16 Mar', holiday: 'Anniversary of the Crimes against Iraq People' },
+      { date: 'Sun, 22 Mar', holiday: 'Eid Al Fitr', tentative: true },
+      { date: 'Wed, 27 May', holiday: 'Eid Al Adha', tentative: true },
+      { date: 'Thu, 28 May', holiday: 'Eid Al Adha', tentative: true },
+      { date: 'Thu, 4 Jun', holiday: 'Eid al-Ghadeer' },
+      { date: 'Tue, 16 Jun', holiday: 'Islamic New Year' },
+      { date: 'Thu, 25 Jun', holiday: 'Ashura' },
+      { date: 'Tue, 14 Jul', holiday: 'Republic Day' },
+      { date: 'Tue, 25 Aug', holiday: 'The Prophet\'s Birthday', tentative: true },
+      { date: 'Thu, 10 Dec', holiday: 'Anniversary of Victory over ISIS' },
+    ],
+    weekend: [
+      { date: 'Fri, 6 Mar', holiday: 'National Day of Tolerance and Coexistence' },
+      { date: 'Fri, 20 Mar', holiday: 'Eid Al Fitr', tentative: true },
+      { date: 'Sat, 21 Mar', holiday: 'Nowruz / Eid Al Fitr', tentative: true },
+      { date: 'Fri, 1 May', holiday: 'Labor Day' },
+      { date: 'Fri, 29 May', holiday: 'Eid Al Adha', tentative: true },
+      { date: 'Sat, 30 May', holiday: 'Eid Al Adha', tentative: true },
+      { date: 'Sat, 3 Oct', holiday: 'Iraqi Independence Day' },
+      { date: 'Fri, 25 Dec', holiday: 'Christmas Day' },
+    ],
+  },
+  {
+    id: 'lebanon', name: 'Lebanon', flag: '🇱🇧', region: 'middle-east',
+    notes: ['Days for the public holidays may vary as per government decisions.','All Islamic holidays are subject to confirmation by the respective governments after moon-sighting.'],
+    fixed: [
+      { date: 'Thu, 1 Jan', holiday: 'New Year\'s Day' },
+      { date: 'Fri, 20 Mar', holiday: 'Eid al-Fitr' },
+      { date: 'Fri, 1 May', holiday: 'Labour Day' },
+      { date: 'Wed, 27 May', holiday: 'Eid al-Adha' },
+      { date: 'Thu, 28 May', holiday: 'Eid al-Adha' },
+      { date: 'Mon, 23 Nov', holiday: 'Lebanese Independence Day' },
+      { date: 'Fri, 25 Dec', holiday: 'Christmas Day' },
+    ],
+    optional: [
+      { date: 'Tue, 6 Jan', holiday: 'Christmas Armenian Day' },
+      { date: 'Mon, 9 Feb', holiday: 'Saint Maroun\'s Day' },
+      { date: 'Fri, 3 Apr', holiday: 'Good Friday' },
+      { date: 'Mon, 6 Apr', holiday: 'Easter Sunday' },
+      { date: 'Fri, 10 Apr', holiday: 'Good Friday Orthodox' },
+      { date: 'Mon, 13 Apr', holiday: 'Easter Sunday Orthodox' },
+      { date: 'Wed, 17 Jun', holiday: 'Islamic New Year' },
+      { date: 'Fri, 26 Jun', holiday: 'Ashura' },
+      { date: 'Wed, 26 Aug', holiday: 'Prophet\'s Birthday' },
+    ],
+    weekend: [
+      { date: 'Sat, 15 Aug', holiday: 'St. Mary Day' },
+    ],
+    optionalNote: 'Any 5 from the optional list below can be chosen by each employee.',
+  },
+  {
+    id: 'pakistan', name: 'Pakistan', flag: '🇵🇰', region: 'middle-east',
+    notes: ['All Islamic holidays are subject to confirmation by the respective governments after moon-sighting.'],
+    fixed: [
+      { date: 'Thu, 5 Feb', holiday: 'Kashmir Day' },
+      { date: 'Mon, 23 Mar', holiday: 'Pakistan Day' },
+      { date: 'Mon, 23 Mar', holiday: 'Eid-ul-Fitr' },
+      { date: 'Fri, 1 May', holiday: 'Labour Day' },
+      { date: 'Wed, 27 May', holiday: 'Eid-ul-Azha' },
+      { date: 'Thu, 28 May', holiday: 'Youm-e-Takbeer / Eid-ul-Azha' },
+      { date: 'Fri, 29 May', holiday: 'Eid-ul-Azha' },
+      { date: 'Wed, 24 Jun', holiday: 'Ashura' },
+      { date: 'Thu, 25 Jun', holiday: 'Ashura' },
+      { date: 'Fri, 14 Aug', holiday: 'Independence Day' },
+      { date: 'Tue, 25 Aug', holiday: 'Eid Milad-un-Nabi' },
+      { date: 'Mon, 9 Nov', holiday: 'Allama Iqbal Day' },
+      { date: 'Fri, 25 Dec', holiday: 'Quaid-e-Azam Day' },
+    ],
+    weekend: [
+      { date: 'Sat, 21 Mar', holiday: 'Eid-ul-Fitr' },
+      { date: 'Sun, 22 Mar', holiday: 'Eid-ul-Fitr' },
+    ],
+  },
+  {
+    id: 'egypt', name: 'Egypt', flag: '🇪🇬', region: 'africa',
+    notes: ['All Islamic holidays are subject to confirmation by the respective governments after moon-sighting.','Holidays falling mid-week will be moved to Thursdays or Sundays, based on the government notification.'],
+    fixed: [
+      { date: 'Wed, 7 Jan', holiday: 'Coptic Christmas Day' },
+      { date: 'Thu, 29 Jan', holiday: 'Revolution Day January 25' },
+      { date: 'Sun, 22 Mar', holiday: 'Eid el Fitr Holiday' },
+      { date: 'Mon, 23 Mar', holiday: 'Eid el Fitr Holiday' },
+      { date: 'Mon, 13 Apr', holiday: 'Spring Festival' },
+      { date: 'Tue, 26 May', holiday: 'Arafat Day' },
+      { date: 'Wed, 27 May', holiday: 'Eid al-Adha Holiday' },
+      { date: 'Thu, 28 May', holiday: 'Eid al-Adha Holiday' },
+      { date: 'Wed, 17 Jun', holiday: 'Muharram / New Hijri Year' },
+      { date: 'Tue, 30 Jun', holiday: 'June 30 Revolution' },
+      { date: 'Thu, 23 Jul', holiday: 'Revolution Day July 23' },
+      { date: 'Wed, 26 Aug', holiday: 'Prophet Mohamed\'s Birthday' },
+      { date: 'Tue, 6 Oct', holiday: 'Armed Forces Day' },
+    ],
+    weekend: [
+      { date: 'Sat, 21 Mar', holiday: 'Eid el Fitr Holiday' },
+      { date: 'Sat, 25 Apr', holiday: 'Sinai Liberation Day' },
+      { date: 'Fri, 1 May', holiday: 'Labor Day' },
+      { date: 'Fri, 29 May', holiday: 'Eid al-Adha' },
+    ],
+  },
+  {
+    id: 'nigeria', name: 'Nigeria', flag: '🇳🇬', region: 'africa',
+    notes: ['All Islamic holidays are subject to confirmation by the respective governments after moon-sighting.'],
+    fixed: [
+      { date: 'Thu, 1 Jan', holiday: 'New Year Holiday' },
+      { date: 'Fri, 20 Mar', holiday: 'Eid Al Fitr', tentative: true },
+      { date: 'Fri, 3 Apr', holiday: 'Good Friday' },
+      { date: 'Mon, 6 Apr', holiday: 'Easter Monday' },
+      { date: 'Fri, 1 May', holiday: 'Workers\'s Day' },
+      { date: 'Wed, 27 May', holiday: 'Eid Al Adha', tentative: true },
+      { date: 'Thu, 28 May', holiday: 'Eid Al Adha', tentative: true },
+      { date: 'Fri, 12 Jun', holiday: 'Democracy Day' },
+      { date: 'Wed, 26 Aug', holiday: 'Id el Maulud / The Prophet\'s Birthday', tentative: true },
+      { date: 'Thu, 1 Oct', holiday: 'National Day' },
+      { date: 'Fri, 25 Dec', holiday: 'Christmas Day' },
+    ],
+    weekend: [
+      { date: 'Sat, 21 Mar', holiday: 'Eid Al Fitr', tentative: true },
+      { date: 'Sat, 26 Dec', holiday: 'Day of Goodwill (Boxing Day)' },
+    ],
+  },
+  {
+    id: 'kenya', name: 'Kenya', flag: '🇰🇪', region: 'africa',
+    notes: ['All Islamic holidays are subject to confirmation by the respective governments after moon-sighting.'],
+    fixed: [
+      { date: 'Thu, 1 Jan', holiday: 'New Year Holiday' },
+      { date: 'Fri, 20 Mar', holiday: 'Eid Al Fitr', tentative: true },
+      { date: 'Fri, 3 Apr', holiday: 'Good Friday' },
+      { date: 'Mon, 6 Apr', holiday: 'Easter Monday' },
+      { date: 'Fri, 1 May', holiday: 'Workers\'s Day' },
+      { date: 'Mon, 1 Jun', holiday: 'Madaraka Day' },
+      { date: 'Tue, 20 Oct', holiday: 'Mashujaa Day' },
+      { date: 'Fri, 25 Dec', holiday: 'Christmas Day' },
+    ],
+    weekend: [
+      { date: 'Sat, 10 Oct', holiday: 'Mazingira Day' },
+      { date: 'Sat, 12 Dec', holiday: 'Jamhuri Day' },
+      { date: 'Sat, 26 Dec', holiday: 'Day of Goodwill (Boxing Day)' },
+    ],
+  },
+  {
+    id: 'south-africa', name: 'South Africa', flag: '🇿🇦', region: 'africa',
+    notes: ['All Islamic holidays are subject to confirmation by the respective governments after moon-sighting.'],
+    fixed: [
+      { date: 'Thu, 1 Jan', holiday: 'New Year Holiday' },
+      { date: 'Fri, 3 Apr', holiday: 'Good Friday' },
+      { date: 'Mon, 6 Apr', holiday: 'Easter Monday / Family Day' },
+      { date: 'Mon, 27 Apr', holiday: 'Freedom Day' },
+      { date: 'Fri, 1 May', holiday: 'Workers\'s Day' },
+      { date: 'Tue, 16 Jun', holiday: 'Youth Day' },
+      { date: 'Mon, 10 Aug', holiday: 'National Women\'s Day' },
+      { date: 'Thu, 24 Sep', holiday: 'Day off for Heritage Day' },
+      { date: 'Wed, 16 Dec', holiday: 'Day of Reconciliation' },
+      { date: 'Fri, 25 Dec', holiday: 'Christmas Day' },
+    ],
+    weekend: [
+      { date: 'Sat, 21 Mar', holiday: 'Human Rights Day' },
+      { date: 'Sat, 26 Dec', holiday: 'Day of Goodwill (Boxing Day)' },
+    ],
+  },
+  {
+    id: 'morocco', name: 'Morocco', flag: '🇲🇦', region: 'africa',
+    notes: ['All Islamic holidays are subject to confirmation by the respective governments after moon-sighting.'],
+    fixed: [
+      { date: 'Thu, 1 Jan', holiday: 'New Year\'s Day' },
+      { date: 'Sun, 11 Jan', holiday: 'Anniversary of the Independence Manifesto' },
+      { date: 'Wed, 14 Jan', holiday: 'Amazigh New Year' },
+      { date: 'Fri, 20 Mar', holiday: 'Eid Al Fitr', tentative: true },
+      { date: 'Fri, 1 May', holiday: 'Labour Day / May Day' },
+      { date: 'Wed, 27 May', holiday: 'Eid Al Adha', tentative: true },
+      { date: 'Thu, 28 May', holiday: 'Eid Al Adha', tentative: true },
+      { date: 'Wed, 17 Jun', holiday: 'Hijra New Year' },
+      { date: 'Thu, 30 Jul', holiday: 'Feast of the Throne' },
+      { date: 'Fri, 14 Aug', holiday: 'Anniversary of the Recovery Oued Ed-Dahab' },
+      { date: 'Thu, 20 Aug', holiday: 'Anniversary of the Revolution of the King and the People' },
+      { date: 'Fri, 21 Aug', holiday: 'Youth Day' },
+      { date: 'Wed, 26 Aug', holiday: 'The Prophet Muhammad\'s Birthday', tentative: true },
+      { date: 'Thu, 27 Aug', holiday: 'The Prophet Muhammad\'s Birthday', tentative: true },
+      { date: 'Fri, 6 Nov', holiday: 'Anniversary of the Green March' },
+      { date: 'Wed, 18 Nov', holiday: 'Independence Day' },
+    ],
+    weekend: [
+      { date: 'Sat, 21 Mar', holiday: 'Eid Al Fitr', tentative: true },
+      { date: 'Sat, 31 Oct', holiday: 'Unity Day' },
+    ],
+  },
+  {
+    id: 'sudan', name: 'Sudan', flag: '🇸🇩', region: 'africa',
+    notes: ['All Islamic holidays are subject to confirmation by the respective governments after moon-sighting.'],
+    fixed: [
+      { date: 'Thu, 1 Jan', holiday: 'Independence Day' },
+      { date: 'Wed, 7 Jan', holiday: 'Coptic Christmas' },
+      { date: 'Sun, 22 Mar', holiday: 'Eid Al Fitr', tentative: true },
+      { date: 'Mon, 23 Mar', holiday: 'Eid Al Fitr', tentative: true },
+      { date: 'Sun, 12 Apr', holiday: 'Coptic Easter' },
+      { date: 'Tue, 26 May', holiday: 'Eid Al Adha', tentative: true },
+      { date: 'Wed, 27 May', holiday: 'Eid Al Adha', tentative: true },
+      { date: 'Thu, 28 May', holiday: 'Eid Al Adha', tentative: true },
+      { date: 'Wed, 17 Jun', holiday: 'Muharram', tentative: true },
+      { date: 'Wed, 26 Aug', holiday: 'The Prophet\'s Birthday', tentative: true },
+    ],
+    weekend: [
+      { date: 'Sat, 21 Mar', holiday: 'Eid Al Fitr', tentative: true },
+      { date: 'Fri, 29 May', holiday: 'Eid Al Adha', tentative: true },
+      { date: 'Sat, 30 May', holiday: 'Eid Al Adha', tentative: true },
+      { date: 'Fri, 25 Dec', holiday: 'Christmas Day' },
+    ],
+  },
+  {
+    id: 'tunisia', name: 'Tunisia', flag: '🇹🇳', region: 'africa',
+    notes: ['All Islamic holidays are subject to confirmation by the respective governments after moon-sighting.'],
+    fixed: [
+      { date: 'Thu, 1 Jan', holiday: 'New Year\'s Day' },
+      { date: 'Fri, 20 Mar', holiday: 'Independence Day' },
+      { date: 'Thu, 9 Apr', holiday: 'Martyrs\' Day' },
+      { date: 'Fri, 1 May', holiday: 'Labour Day' },
+      { date: 'Tue, 26 May', holiday: 'Eid Al Adha', tentative: true },
+      { date: 'Wed, 27 May', holiday: 'Eid Al Adha', tentative: true },
+      { date: 'Mon, 15 Jun', holiday: 'Muharram', tentative: true },
+      { date: 'Thu, 13 Aug', holiday: 'Women\'s Day' },
+      { date: 'Mon, 24 Aug', holiday: 'The Prophet\'s Birthday', tentative: true },
+      { date: 'Thu, 15 Oct', holiday: 'Evacuation Day' },
+      { date: 'Thu, 17 Dec', holiday: 'Revolution and Youth Day' },
+    ],
+    weekend: [
+      { date: 'Sat, 21 Mar', holiday: 'Eid Al Fitr', tentative: true },
+      { date: 'Sun, 22 Mar', holiday: 'Eid Al Fitr', tentative: true },
+      { date: 'Sat, 25 Jul', holiday: 'Republic Day' },
+    ],
+  },
+  {
+    id: 'turkey', name: 'Turkey', flag: '🇹🇷', region: 'europe',
+    notes: ['All Islamic holidays are subject to confirmation by the respective governments after moon-sighting.'],
+    fixed: [
+      { date: 'Thu, 1 Jan', holiday: 'New Year Day' },
+      { date: 'Fri, 20 Mar', holiday: 'Ramadan Feast Holiday' },
+      { date: 'Thu, 23 Apr', holiday: 'National Sovereignty and Children\'s Day' },
+      { date: 'Fri, 1 May', holiday: 'Labour and Solidarity Day' },
+      { date: 'Tue, 19 May', holiday: 'Youth and Sports Day' },
+      { date: 'Wed, 27 May', holiday: 'Sacrifice Feast Holiday' },
+      { date: 'Thu, 28 May', holiday: 'Sacrifice Feast Holiday' },
+      { date: 'Fri, 29 May', holiday: 'Sacrifice Feast Holiday' },
+      { date: 'Wed, 15 Jul', holiday: 'Democracy and National Solidarity Day' },
+      { date: 'Thu, 29 Oct', holiday: 'Republic Day' },
+    ],
+    weekend: [
+      { date: 'Sat, 21 Mar', holiday: 'Ramadan Feast Holiday' },
+      { date: 'Sun, 22 Mar', holiday: 'Ramadan Feast Holiday' },
+      { date: 'Sat, 30 May', holiday: 'Sacrifice Feast Holiday' },
+      { date: 'Sun, 30 Aug', holiday: 'Victory Day' },
+    ],
+  },
+];
+
+const STATE_NAMES = { MH:'Maharashtra', KL:'Kerala', TN:'Tamilnadu', KA:'Karnataka', TG:'Telangana' };
+const REGION_NAMES = { all:'All Countries', asia:'Asia Pacific', 'middle-east':'Middle East', africa:'Africa', europe:'Europe / Turkey' };
+
+let currentCountry = 'india-all';
+let currentFilter = 'all';
+let currentRegion = 'all';
+let searchText = '';
+
+// ── RENDER NAV ────────────────────────────────────────
+const INDIA_STATES_LIST = [
+  {id:'india-all', label:'All States (overview)'},
+  {id:'india-MH', label:'Maharashtra'},
+  {id:'india-KL', label:'Kerala'},
+  {id:'india-TN', label:'Tamilnadu'},
+  {id:'india-KA', label:'Karnataka'},
+  {id:'india-TG', label:'Telangana'},
+];
+
+function renderNav() {
+  const nav = document.getElementById('country-nav');
+  const india = COUNTRIES.find(c => c.id === 'india');
+  const total = Object.values(india.stateTotals).reduce((a,b)=>a+b,0);
+  let html = `<div class="nav-section-label">India</div>`;
+  html += `<div class="nav-country ${currentCountry==='india'||currentCountry==='india-all'?'active':''} nav-india-parent" data-id="india" onclick="selectCountry('india-all')">
+    <span class="flag">🇮🇳</span>
+    <span>All states</span>
+  </div>`;
+  INDIA_STATES_LIST.filter(s => s.id !== 'india-all').forEach(s => {
+    const stCode = s.id.replace('india-','');
+    const stTotal = india.stateTotals[stCode] || 0;
+    html += `<div class="nav-state ${currentCountry === s.id ? 'active' : ''}" onclick="selectCountry('${s.id}')">
+      <span style="font-size:13px">📍</span>
+      <span>${s.label}</span>
+      <span class="count-pill" style="margin-left:auto">${stTotal}</span>
+    </div>`;
+  });
+  nav.innerHTML = html;
+}
+
+function getTotalCount(c) {
+  let n = (c.fixed||[]).length + (c.optional||[]).length + (c.weekend||[]).length;
+  return n;
+}
+
+function getStateCount(stCode) {
+  const india = COUNTRIES.find(c => c.id === 'india');
+  let n = 0;
+  ['fixed','optional','weekend'].forEach(type => {
+    (india[type]||[]).forEach(h => {
+      if (!h.states || h.states.includes(stCode)) n++;
+    });
+  });
+  return n;
+}
+
+function getStateHolidays(stCode) {
+  // Returns {fixed, optional, weekend} filtered to this state
+  // For optional: no state filter (all states get same pool, pick 2)
+  const india = COUNTRIES.find(c => c.id === 'india');
+  return {
+    fixed: (india.fixed||[]).filter(h => !h.states || h.states.includes(stCode)),
+    optional: (india.optional||[]),  // all optional available to all states
+    weekend: (india.weekend||[]).filter(h => !h.states || h.states.includes(stCode)),
+  };
+}
+
+function stateTabBar(activeCode) {
+  const india = COUNTRIES.find(c => c.id === 'india');
+  const states = ['MH','KL','TN','KA','TG'];
+  return `<div class="state-tabs-bar">
+    <button class="state-tab-btn${activeCode==='all'?' active':''}" onclick="selectCountry('india-all')">
+      🗺️ All states
+    </button>
+    ${states.map(s => `<button class="state-tab-btn${activeCode===s?' active':''}" onclick="selectCountry('india-${s}')">
+      📍 ${STATE_NAMES[s]} <span class="stcount">${india.stateTotals[s]}</span>
+    </button>`).join('')}
+  </div>`;
+}
+
+function renderIndiaState(stCode) {
+  const stName = STATE_NAMES[stCode];
+  const data = getStateHolidays(stCode);
+  const india = COUNTRIES.find(c => c.id === 'india');
+  const showFixed = currentFilter === 'all' || currentFilter === 'fixed';
+  const showOptional = currentFilter === 'all' || currentFilter === 'optional';
+  const showWeekend = currentFilter === 'all' || currentFilter === 'weekend';
+  const total = india.stateTotals[stCode] || 0;
+
+  let html = stateTabBar(stCode);
+
+  // Today + upcoming banner for this state
+  const allForBanner = [
+    ...data.fixed.map(h=>({...h, isOptional:false})),
+    ...data.optional.map(h=>({...h, isOptional:true}))
+  ].sort((a,b) => parseDateStr(a.date) - parseDateStr(b.date));
+  html += buildUpcomingBanner(allForBanner);
+
+  html += `<div class="state-header-block">
+    <span style="font-size:28px">🇮🇳</span>
+    <div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:2px">India · ${stCode}</div>
+      <div class="state-header-name">${stName}</div>
+    </div>
+    <span class="state-total-pill">${total} holidays</span>
+  </div>
+  <div class="stats-row">
+    <div class="stat-chip green"><span class="num">${data.fixed.length}</span><span>Fixed</span></div>
+    <div class="stat-chip blue"><span class="num">2</span><span>Floating (pick 2)</span></div>
+    <div class="stat-chip orange"><span class="num">${data.weekend.length}</span><span>Weekend</span></div>
+  </div>`;
+
+  function holidayRows(holidays) {
+    // find index of next upcoming (for row-next class)
+    let nextIdx = -1;
+    holidays.forEach((h,i) => { if (nextIdx===-1 && daysUntil(parseDateStr(h.date)) >= 0) nextIdx = i; });
+    return holidays.map((h,i) => {
+      const hDt = parseDateStr(h.date);
+      const days = daysUntil(hDt);
+      let rc = '';
+      if (days < 0) rc = 'row-past';
+      else if (days === 0) rc = 'row-today';
+      else if (i === nextIdx) rc = 'row-next';
+      else if (days <= 30) rc = 'row-soon';
+      const pill = (days >= 0 && days <= 30) ? countdownPill(hDt) : (days===0?countdownPill(hDt):'');
+      return `<tr class="${rc}">
+        <td class="sr-cell">${i+1}</td>
+        <td class="date-cell">${h.date} ${getDayChip(h.date)}</td>
+        <td class="holiday-name">${h.holiday}${pill}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  // Merge fixed + optional into one sorted list
+  const showAny = showFixed || showOptional;
+  if (showAny) {
+    const merged = [
+      ...(showFixed ? data.fixed.map(h=>({...h,isOptional:false})) : []),
+      ...(showOptional ? data.optional.map(h=>({...h,isOptional:true})) : []),
+    ].sort((a,b) => parseDateStr(a.date) - parseDateStr(b.date));
+    if (merged.length) {
+      html += `<div class="section-label">Holidays</div>
+      <table class="holiday-table">
+        <thead><tr><th>#</th><th>Date</th><th>Holiday</th></tr></thead>
+        <tbody>${holidayRowsMerged(merged)}</tbody>
+      </table>`;
+    }
+  }
+
+  if (showWeekend && data.weekend.length) {
+    html += `<div class="weekend-section">
+      <div class="section-label" style="padding:12px 16px 0;margin:0;color:#c0392b">Holidays Falling on Weekend</div>
+      <table class="holiday-table weekend-tbl">
+        <thead><tr><th>#</th><th>Date</th><th>Holiday</th></tr></thead>
+        <tbody>${holidayRows(data.weekend)}</tbody>
+      </table>
+    </div>`;
+  }
+
+  // ── LONG WEEKEND PLANNER ──
+  html += renderIndiaPlanner(stCode, data);
+
+  html += `<div class="state-note">— Employees working at client sites observe the client Holiday List. Employees in other locations follow the leave calendar of the closest mapped location.</div>`;
+  return html;
+}
+
+// ── TODAY + UPCOMING HELPERS ──────────────────────────
+const TODAY = new Date();
+TODAY.setHours(0,0,0,0);
+
+function daysUntil(dt) {
+  const d = new Date(dt); d.setHours(0,0,0,0);
+  return Math.round((d - TODAY) / 86400000);
+}
+
+function countdownPill(hDate) {
+  const days = daysUntil(hDate);
+  if (days < 0) return '';
+  if (days === 0) return `<span class="countdown-pill cp-today">Today!</span>`;
+  if (days <= 7) return `<span class="countdown-pill cp-next">In ${days}d</span>`;
+  if (days <= 30) return `<span class="countdown-pill cp-soon">In ${days}d</span>`;
+  return '';
+}
+
+function rowClass(hDate) {
+  const days = daysUntil(hDate);
+  if (days < 0) return 'row-past';
+  if (days === 0) return 'row-today';
+  return '';  // applied dynamically after finding the first upcoming
+}
+
+function buildUpcomingBanner(allHolidays) {
+  // allHolidays: array of {date: 'Thu, 1 Jan', holiday: '...'}
+  const dated = allHolidays
+    .map(h => ({ ...h, dt: parseDateStr(h.date), days: daysUntil(parseDateStr(h.date)) }))
+    .filter(h => h.days >= 0)
+    .sort((a,b) => a.days - b.days);
+
+  const upcoming = dated.slice(0, 4);  // show next 4
+
+  const dateStr = TODAY.toLocaleDateString('en-GB', {weekday:'long', day:'numeric', month:'long', year:'numeric'});
+
+  if (!upcoming.length) {
+    return `<div class="today-banner">
+      <div class="today-date-block"><div class="today-label">Today</div><div class="today-value">${dateStr}</div></div>
+      <div class="today-divider"></div>
+      <div class="upcoming-block"><div class="upcoming-label">Upcoming holidays</div><div class="upcoming-list"><span style="font-size:12px;color:#888">No more holidays in 2026</span></div></div>
+    </div>`;
+  }
+
+  const items = upcoming.map((h, i) => {
+    const dLabel = h.days === 0 ? 'Today!' : `${h.days}d away`;
+    const optTag = h.isOptional ? `<span class="up-optional-tag">optional</span>` : '';
+    return `<div class="upcoming-item${i===0?' next-h':''}">
+      <div>
+        <div class="upcoming-name">${h.holiday}${optTag}</div>
+        <div class="upcoming-date-s">${h.date}</div>
+      </div>
+      <div class="upcoming-days-s">${dLabel}</div>
+    </div>`;
+  }).join('');
+
+  return `<div class="today-banner">
+    <div class="today-date-block"><div class="today-label">Today</div><div class="today-value">${dateStr}</div></div>
+    <div class="today-divider"></div>
+    <div class="upcoming-block"><div class="upcoming-label">Upcoming holidays</div><div class="upcoming-list">${items}</div></div>
+  </div>`;
+}
+
+// ── Parse "Thu, 1 Jan" → Date object (2026) ──────────
+function parseDateStr(s) {
+  const months = {Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
+  const parts = s.trim().split(/[\s,]+/);
+  const day = parseInt(parts[1]);
+  const mon = months[parts[2]];
+  return new Date(2026, mon, day);
+}
+function dateKey2(dt) {
+  return `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`;
+}
+function addDays2(dt, n) { const d = new Date(dt); d.setDate(d.getDate()+n); return d; }
+function fmtShort(dt) { return dt.toLocaleDateString('en-GB',{day:'numeric',month:'short'}); }
+
+function buildHolidaySet(data) {
+  const set = {};
+  data.fixed.forEach(h => { const d = parseDateStr(h.date); set[dateKey2(d)] = {name:h.holiday,type:'fixed'}; });
+  data.weekend.forEach(h => { const d = parseDateStr(h.date); set[dateKey2(d)] = {name:h.holiday,type:'weekend'}; });
+  return set;
+}
+
+function findLongWeekends(holidaySet, minLen) {
+  const hDates = Object.keys(holidaySet).filter(k => holidaySet[k].type==='fixed').sort();
+  const results = [];
+  const seen = new Set();
+
+  hDates.forEach(hk => {
+    const base = new Date(hk);
+    // try window starting 3 days before, ending 3 days after
+    for (let startOff = -3; startOff <= 0; startOff++) {
+      const start = addDays2(base, startOff);
+      if (start.getFullYear() !== 2026) continue;
+      for (let len = minLen; len <= 7; len++) {
+        const end = addDays2(start, len-1);
+        if (end.getFullYear() !== 2026) continue;
+        const days = [];
+        for (let i=0;i<len;i++) days.push(addDays2(start,i));
+        const holDays = days.filter(d => holidaySet[dateKey2(d)]?.type==='fixed');
+        const wkDays = days.filter(d => { const w=d.getDay(); return w===0||w===6; });
+        const wkendHolDays = days.filter(d => holidaySet[dateKey2(d)]?.type==='weekend');
+        const offDays = new Set([...holDays.map(dateKey2), ...wkDays.map(dateKey2), ...wkendHolDays.map(dateKey2)]);
+        const leaveDays = days.filter(d => !offDays.has(dateKey2(d)));
+        if (holDays.length < 1) continue;
+        if (leaveDays.length < 1 || leaveDays.length > 3) continue;
+        // All days must be contiguous off or leave
+        const key = `${dateKey2(start)}_${dateKey2(end)}`;
+        if (seen.has(key)) continue;
+        seen.add(key);
+        results.push({ start, end, totalDays:len, holDays, wkDays, leaveDays, wkendHolDays, key });
+      }
+    }
+  });
+
+  return results
+    .filter(r => r.totalDays >= minLen)
+    .sort((a,b) => a.start - b.start);
+}
+
+function renderIndiaPlanner(stCode, data) {
+  const hSet = buildHolidaySet(data);
+  const minLen = 4; // default, will be controlled via JS
+  const sId = `planner-${stCode}`;
+
+  return `<div class="section-label" style="margin-top:24px">Long weekend planner</div>
+  <div class="planner-wrap" id="${sId}">
+    <div class="planner-controls">
+      <label>Minimum break length</label>
+      <select onchange="rebuildPlanner('${stCode}',parseInt(this.value))">
+        <option value="3">3 days (1 leave)</option>
+        <option value="4" selected>4 days (1–2 leave)</option>
+        <option value="5">5 days (2–3 leave)</option>
+      </select>
+    </div>
+    <div id="lw-summary-${stCode}" class="lw-summary"></div>
+    <div id="lw-cards-${stCode}" class="sug-grid"></div>
+    <div class="cal-legend">
+      <div class="cl-item"><div class="cl-box" style="background:#eef6ee;border:1px solid #91c890"></div> Public holiday</div>
+      <div class="cl-item"><div class="cl-box" style="background:#e8f4fd;border:1px solid #9dc9f5"></div> Suggested leave</div>
+      <div class="cl-item"><div class="cl-box" style="background:#f3eeff;border:1px solid #c2b0f0"></div> Long weekend block</div>
+      <div class="cl-item"><div class="cl-box" style="background:#f3f2f2;border:1px solid #dddbda"></div> Weekend</div>
+    </div>
+    <div id="lw-cal-${stCode}" class="cal-year-grid"></div>
+    <div id="lw-detail-${stCode}"></div>
+  </div>`;
+}
+
+// ── PLANNER STATE ─────────────────────────────────────
+const plannerState = {};
+
+function rebuildPlanner(stCode, minLen) {
+  plannerState[stCode] = plannerState[stCode] || {};
+  plannerState[stCode].minLen = minLen;
+  plannerState[stCode].selIdx = null;
+  renderPlanner(stCode);
+}
+
+function renderPlanner(stCode) {
+  const india = COUNTRIES.find(c => c.id === 'india');
+  const data = getStateHolidays(stCode);
+  const hSet = buildHolidaySet(data);
+  const ps = plannerState[stCode] = plannerState[stCode] || {minLen:4, selIdx:null};
+  const sugs = findLongWeekends(hSet, ps.minLen);
+  ps.sugs = sugs;
+
+  // Summary
+  const sumEl = document.getElementById(`lw-summary-${stCode}`);
+  if (sumEl) sumEl.innerHTML = `<strong>${sugs.length} long weekend opportunity${sugs.length!==1?'s':''}</strong> found in 2026 for ${STATE_NAMES[stCode]}. Click a suggestion to highlight it on the calendar.`;
+
+  // Cards
+  const cardsEl = document.getElementById(`lw-cards-${stCode}`);
+  if (cardsEl) {
+    if (!sugs.length) { cardsEl.innerHTML = '<div style="font-size:12px;color:var(--txm);padding:8px 0">No opportunities found for selected length.</div>'; }
+    else {
+      const MNAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      cardsEl.innerHTML = sugs.map((s,i) => {
+        const n = s.totalDays;
+        const bcls = n>=6?'b-6':n===5?'b-5':n===4?'b-4':'b-3';
+        const blbl = n+'‑day break';
+        const hnames = s.holDays.map(d=>hSet[dateKey2(d)]?.name||'').filter(Boolean);
+        const lnames = s.leaveDays.map(d=>fmtShort(d)).join(', ');
+        return `<div class="sug-card${ps.selIdx===i?' sel':''}" onclick="selectLW('${stCode}',${i})">
+          <div class="sc-top">
+            <div class="sc-dates">${fmtShort(s.start)} – ${fmtShort(s.end)}</div>
+            <span class="sc-badge ${bcls}">${blbl}</span>
+          </div>
+          <div class="sc-hname">${hnames.join(', ')}</div>
+          <div class="sc-leave">Take <em>${s.leaveDays.length}</em> leave → ${n} days off</div>
+        </div>`;
+      }).join('');
+    }
+  }
+
+  renderPlannerCal(stCode, hSet, sugs, ps.selIdx);
+  renderPlannerDetail(stCode, hSet, sugs, ps.selIdx);
+}
+
+function selectLW(stCode, idx) {
+  plannerState[stCode] = plannerState[stCode] || {};
+  plannerState[stCode].selIdx = idx;
+  const india = COUNTRIES.find(c => c.id === 'india');
+  const data = getStateHolidays(stCode);
+  const hSet = buildHolidaySet(data);
+  const sugs = plannerState[stCode].sugs || [];
+  // Update card selection
+  const cardsEl = document.getElementById(`lw-cards-${stCode}`);
+  if (cardsEl) cardsEl.querySelectorAll('.sug-card').forEach((el,i) => el.classList.toggle('sel', i===idx));
+  renderPlannerCal(stCode, hSet, sugs, idx);
+  renderPlannerDetail(stCode, hSet, sugs, idx);
+}
+
+function renderPlannerCal(stCode, hSet, sugs, selIdx) {
+  const calEl = document.getElementById(`lw-cal-${stCode}`);
+  if (!calEl) return;
+
+  // Build leave+lw sets for selected suggestion
+  let leaveSet = new Set(), lwSet = new Set();
+  if (selIdx !== null && sugs[selIdx]) {
+    const s = sugs[selIdx];
+    s.leaveDays.forEach(d => leaveSet.add(dateKey2(d)));
+    let cur = new Date(s.start);
+    while (cur <= s.end) { lwSet.add(dateKey2(cur)); cur = addDays2(cur,1); }
+  }
+
+  const today = new Date();
+  const MNAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const DOWS = ['S','M','T','W','T','F','S'];
+
+  let html = '';
+  for (let m=0; m<12; m++) {
+    const firstDay = new Date(2026, m, 1).getDay();
+    const daysInMonth = new Date(2026, m+1, 0).getDate();
+    // Check if this month has any highlight
+    let monthHasHL = false;
+    for (let d=1;d<=daysInMonth;d++) {
+      const k = dateKey2(new Date(2026,m,d));
+      if (hSet[k] || leaveSet.has(k) || lwSet.has(k)) { monthHasHL=true; break; }
+    }
+
+    html += `<div class="month-block">
+      <div class="month-title">${MNAMES[m]} 2026</div>
+      <div class="mini-cal">
+        <div class="mc-dow">${DOWS.map(d=>`<span>${d}</span>`).join('')}</div>
+        <div class="mc-grid">`;
+
+    for (let e=0;e<firstDay;e++) html += `<div class="mc-day empty"></div>`;
+    for (let d=1;d<=daysInMonth;d++) {
+      const dt = new Date(2026,m,d);
+      const k = dateKey2(dt);
+      const isH = hSet[k]?.type==='fixed';
+      const isWH = hSet[k]?.type==='weekend';
+      const isL = leaveSet.has(k);
+      const isLW = lwSet.has(k) && !isH && !isL;
+      const isSat = dt.getDay()===6, isSun = dt.getDay()===0;
+      const isWk = isSat||isSun;
+      const isToday = today.getFullYear()===2026&&today.getMonth()===m&&today.getDate()===d;
+
+      let cls = 'mc-day';
+      if (isH) cls += ' hday';
+      else if (isL) cls += ' leave-d';
+      else if (isLW) cls += ' lw-d';
+      else if (isWk) cls += ' wkend';
+      if (isToday) cls += ' today-d';
+
+      const title = isH ? hSet[k].name : isL ? 'Take leave' : isLW ? 'Long weekend' : isWH ? hSet[k].name+' (holiday on weekend)' : '';
+      html += `<div class="${cls}"${title?` title="${title.replace(/"/g,"'")}"`:''}>`;
+      html += d;
+      if (isH || isL) html += `<span style="display:block;font-size:7px;line-height:1;margin-top:1px;overflow:hidden;white-space:nowrap;max-width:28px">${isL?'off':''}</span>`;
+      html += `</div>`;
+    }
+
+    html += `</div></div></div>`;
+  }
+  calEl.innerHTML = html;
+}
+
+function renderPlannerDetail(stCode, hSet, sugs, selIdx) {
+  const el = document.getElementById(`lw-detail-${stCode}`);
+  if (!el) return;
+  if (selIdx === null || !sugs[selIdx]) { el.innerHTML = ''; return; }
+  const s = sugs[selIdx];
+  const n = s.totalDays;
+  const bcls = n>=6?'b-6':n===5?'b-5':n===4?'b-4':'b-3';
+  const hnames = s.holDays.map(d=>hSet[dateKey2(d)]?.name||'').filter(Boolean).join(', ');
+  const lnames = s.leaveDays.map(d=>fmtShort(d)).join(', ');
+  const wnames = s.wkDays.map(d=>fmtShort(d)).join(', ')||'None';
+  const stName = STATE_NAMES[stCode];
+  el.innerHTML = `<div class="detail-box">
+    <div class="db-title">${fmtShort(s.start)} – ${fmtShort(s.end)} &nbsp;<span class="sc-badge ${bcls}">${n}-day break</span></div>
+    <div class="db-row"><span class="db-lbl">Total days off</span><span class="db-val">${n} days</span></div>
+    <div class="db-row"><span class="db-lbl">Leave days to apply</span><span class="db-val">${s.leaveDays.length} day${s.leaveDays.length>1?'s':''} — ${lnames}</span></div>
+    <div class="db-row"><span class="db-lbl">Holidays</span><span class="db-val">${hnames}</span></div>
+    <div class="db-row"><span class="db-lbl">Weekend days</span><span class="db-val">${wnames}</span></div>
+    <div class="db-btn"><button class="slds-btn slds-btn-neutral" style="font-size:12px" onclick="sendPrompt('I am planning a long weekend from ${fmtShort(s.start)} to ${fmtShort(s.end)} (${n} days) in ${stName}, India. The holidays are: ${hnames}. I need to take ${s.leaveDays.length} leave day(s) on ${lnames}. Suggest how to make the most of this break — travel ideas from ${stName}, how to plan the leave application, and any tips.')">Plan this trip ↗</button></div>
+  </div>`;
+}
+
+// ── RENDER CONTENT ────────────────────────────────────
+function renderContent() {
+  const area = document.getElementById('content-area');
+  const query = searchText.toLowerCase();
+  const india = COUNTRIES.find(c => c.id === 'india');
+
+  // Search mode — India only, state-aware
+  if (query) {
+    area.innerHTML = '';
+    const view = (currentCountry === 'india') ? 'india-all' : currentCountry;
+    const stCode = view.replace('india-', '');
+    const searchStates = stCode === 'all' ? Object.keys(STATE_NAMES) : [stCode];
+    let totalMatches = 0;
+    let html = '';
+    searchStates.forEach(sc => {
+      const stData = getStateHolidays(sc);
+      const all = [];
+      (stData.fixed||[]).forEach(h => { if (matchHoliday(h, STATE_NAMES[sc], query)) all.push({...h, type:'fixed'}); });
+      (stData.optional||[]).forEach(h => { if (matchHoliday(h, STATE_NAMES[sc], query)) all.push({...h, type:'optional'}); });
+      (stData.weekend||[]).forEach(h => { if (matchHoliday(h, STATE_NAMES[sc], query)) all.push({...h, type:'weekend'}); });
+      const filtered = all.filter(h => currentFilter==='all' || h.type===currentFilter);
+      // Deduplicate across states by holiday name+date
+      const unique = filtered.filter((h,i,arr) => arr.findIndex(x=>x.holiday===h.holiday&&x.date===h.date)===i);
+      if (!unique.length) return;
+      totalMatches += unique.length;
+      html += `<div style="margin-bottom:22px">
+        ${stCode==='all' ? `<div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:8px;display:flex;align-items:center;gap:6px"><span>📍</span>${hl(STATE_NAMES[sc],query)}</div>` : ''}
+        <table class="holiday-table">
+          <thead><tr><th>#</th><th>Date</th><th>Holiday</th><th>Type</th></tr></thead>
+          <tbody>${unique.map((h,i) => `<tr>
+            <td class="sr-cell">${i+1}</td>
+            <td class="date-cell">${hl(h.date,query)} ${getDayChip(h.date)}</td>
+            <td class="holiday-name">${hl(h.holiday,query)}</td>
+            <td><span style="font-size:11px;padding:2px 7px;border-radius:4px;font-weight:600;background:${h.type==='fixed'?'#e8f5ee':h.type==='optional'?'#e8f0ff':'#fef0ef'};color:${h.type==='fixed'?'#1a6b4a':h.type==='optional'?'#4a2d8a':'#c0392b'}">${h.type}</span></td>
+          </tr>`).join('')}</tbody>
+        </table>
+      </div>`;
+    });
+    area.innerHTML = html || `<div class="empty-state"><div class="big">🔍</div><p>No holidays found for "<strong>${query}</strong>"</p></div>`;
+    document.getElementById('result-count').textContent = totalMatches ? `${totalMatches} result${totalMatches>1?'s':''}` : '';
+    return;
+  }
+
+  document.getElementById('result-count').textContent = '';
+  area.innerHTML = '';
+
+  // Normal view — India only
+  const div = document.createElement('div');
+  div.className = 'country-section visible';
+  div.id = 'section-india-state';
+
+  const view = (currentCountry === 'india') ? 'india-all' : currentCountry;
+  const stCode = view.replace('india-', '');
+
+  if (stCode === 'all') {
+    div.innerHTML = renderIndiaOverview(india);
+  } else {
+    div.innerHTML = renderIndiaState(stCode);
+  }
+  area.appendChild(div);
+  if (stCode !== 'all') setTimeout(() => renderPlanner(stCode), 0);
+}
+
+function getMatchingHolidays(c, q) {
+  const all = [];
+  (c.fixed||[]).forEach(h => { if (matchHoliday(h, c.name, q)) all.push({...h, type:'fixed'}); });
+  (c.optional||[]).forEach(h => { if (matchHoliday(h, c.name, q)) all.push({...h, type:'optional'}); });
+  (c.weekend||[]).forEach(h => { if (matchHoliday(h, c.name, q)) all.push({...h, type:'weekend'}); });
+  return all;
+}
+function matchHoliday(h, country, q) {
+  return h.holiday.toLowerCase().includes(q) || h.date.toLowerCase().includes(q) || country.toLowerCase().includes(q);
+}
+function hl(text, q) {
+  if (!q) return text;
+  const re = new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi');
+  return text.replace(re, '<span class="hl">$1</span>');
+}
+
+function renderCountrySearch(c, matches, q) {
+  const fixed = matches.filter(h => h.type === 'fixed' && (currentFilter === 'all' || currentFilter === 'fixed'));
+  const optional = matches.filter(h => h.type === 'optional' && (currentFilter === 'all' || currentFilter === 'optional'));
+  const weekend = matches.filter(h => h.type === 'weekend' && (currentFilter === 'all' || currentFilter === 'weekend'));
+  const allFiltered = [...fixed, ...optional, ...weekend];
+  if (allFiltered.length === 0) return '';
+  return `<div style="margin-bottom:32px">
+    <div style="font-size:20px;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:8px">
+      <span>${c.flag}</span><span>${hl(c.name,q)}</span>
+      <span style="font-size:13px;color:var(--muted);font-weight:400">${allFiltered.length} match${allFiltered.length>1?'es':''}</span>
+    </div>
+    ${renderHolidayTableRows(allFiltered, q)}
+  </div>`;
+}
+function renderHolidayTableRows(rows, q='') {
+  return `<table class="holiday-table">
+    <thead><tr><th>#</th><th>Date</th><th>Holiday</th><th>Type</th></tr></thead>
+    <tbody>${rows.map((h,i) => `<tr>
+      <td class="sr-cell">${i+1}</td>
+      <td class="date-cell">${hl(h.date,q)} ${getDayChip(h.date)}</td>
+      <td class="holiday-name">${hl(h.holiday,q)}${h.tentative?'<span class="tentative-tag">Tentative</span>':''}</td>
+      <td><span style="font-size:11px;padding:2px 7px;border-radius:4px;font-weight:600;background:${h.type==='fixed'?'#e8f5ee':h.type==='optional'?'#e8f0ff':'#fef0ef'};color:${h.type==='fixed'?'#1a6b4a':h.type==='optional'?'#4a2d8a':'#c0392b'}">${h.type}</span></td>
+    </tr>`).join('')}</tbody>
+  </table>`;
+}
+
+function getDayChip(dateStr) {
+  const day = dateStr.split(',')[0].toLowerCase().slice(0,3);
+  const map = {mon:'mon',tue:'tue',wed:'wed',thu:'thu',fri:'fri',sat:'sat',sun:'sun'};
+  const cls = map[day] || '';
+  const labels = {mon:'Mon',tue:'Tue',wed:'Wed',thu:'Thu',fri:'Fri',sat:'Sat',sun:'Sun'};
+  return `<span class="day-chip ${cls}">${labels[day]||''}</span>`;
+}
+
+function renderIndiaOverview(c) {
+  // The existing all-states matrix view
+  return renderCountry(c);
+}
+
+function renderCountry(c) {
+  const showFixed = currentFilter === 'all' || currentFilter === 'fixed';
+  const showOptional = currentFilter === 'all' || currentFilter === 'optional';
+  const showWeekend = currentFilter === 'all' || currentFilter === 'weekend';
+
+  const fixedCount = (c.fixed||[]).length;
+  const optCount = (c.optional||[]).length;
+  const wkCount = (c.weekend||[]).length;
+
+  // For India, badge shows per-state range
+  const badge = c.indiaStates
+    ? '12–13 holidays per state'
+    : `${getTotalCount(c)} holidays`;
+
+  let html = `<div class="country-header">
+    <div class="country-title-block">
+      <div class="country-flag-lg">${c.flag}</div>
+      <div>
+        <div class="country-name">${c.name}</div>
+        <div class="country-subtitle">Azentio Holiday List · 2026</div>
+      </div>
+    </div>
+    <div class="holiday-count-badge">${badge}</div>
+  </div>`;
+
+  // India: state selector tabs + today banner
+  if (c.indiaStates) {
+    html += stateTabBar('all');
+    // For overview, show upcoming across all states (use MH as representative)
+    const mhData = getStateHolidays('MH');
+    const allFixed = [...mhData.fixed, ...mhData.optional].sort((a,b) => parseDateStr(a.date) - parseDateStr(b.date));
+    html += buildUpcomingBanner(allFixed);
+  }
+
+  html += `<div class="stats-row">
+    ${c.indiaStates
+      ? `<div class="stat-chip green"><span class="num">10–11</span><span>Fixed per state</span></div>
+         <div class="stat-chip blue"><span class="num">2</span><span>Floating (pick 2)</span></div>
+         <div class="stat-chip orange"><span class="num">5 states</span><span>covered</span></div>`
+      : `${fixedCount ? `<div class="stat-chip green"><span class="num">${fixedCount}</span><span>Fixed holidays</span></div>` : ''}
+         ${optCount ? `<div class="stat-chip blue"><span class="num">${optCount}</span><span>${c.optionalNote ? 'Optional (choose 5)' : 'Floating / Optional'}</span></div>` : ''}
+         ${wkCount ? `<div class="stat-chip orange"><span class="num">${wkCount}</span><span>Fall on weekend</span></div>` : ''}`
+    }
+  </div>`;
+
+  // Fixed holidays
+  if (showFixed && c.fixed && c.fixed.length) {
+    if (c.indiaStates) {
+      html += renderIndiaStateTable(c.fixed, 'Fixed Holidays');
+    } else {
+      html += `<div class="section-label">Fixed Public Holidays</div>
+      <table class="holiday-table">
+        <thead><tr><th>#</th><th>Date</th><th>Holiday</th></tr></thead>
+        <tbody>${c.fixed.map((h,i) => `<tr>
+          <td class="sr-cell">${i+1}</td>
+          <td class="date-cell">${h.date} ${getDayChip(h.date)}</td>
+          <td class="holiday-name">${h.holiday}${h.tentative ? '<span class="tentative-tag">Tentative</span>' : ''}</td>
+        </tr>`).join('')}</tbody>
+      </table>`;
+    }
+  }
+
+  // Optional holidays
+  if (showOptional && c.optional && c.optional.length) {
+    if (c.indiaStates) {
+      html += renderIndiaStateTable(c.optional, 'Floating / Optional Holidays', true);
+    } else {
+      html += `<div class="optional-section">
+        <div class="section-label" style="margin:12px 16px 8px">Optional / Floating Holidays${c.optionalNote ? ` <span style="font-size:11px;font-weight:400;color:#4a2d8a;text-transform:none;letter-spacing:0">(${c.optionalNote})</span>` : ''}</div>
+        <table class="holiday-table optional-tbl">
+          <thead><tr><th>#</th><th>Date</th><th>Holiday</th></tr></thead>
+          <tbody>${c.optional.map((h,i) => `<tr>
+            <td class="sr-cell">${i+1}</td>
+            <td class="date-cell">${h.date} ${getDayChip(h.date)}</td>
+            <td class="holiday-name">${h.holiday}${h.tentative ? '<span class="tentative-tag">Tentative</span>' : ''}</td>
+          </tr>`).join('')}</tbody>
+        </table>
+      </div>`;
+    }
+  }
+
+  // Weekend holidays
+  if (showWeekend && c.weekend && c.weekend.length) {
+    if (c.indiaStates) {
+      html += renderIndiaStateTable(c.weekend, 'Holidays Falling on Weekend');
+    } else {
+      html += `<div class="weekend-section">
+        <div class="section-label" style="margin:12px 16px 8px;color:#c0392b">Holidays Falling on Weekend</div>
+        <table class="holiday-table weekend-tbl">
+          <thead><tr><th>#</th><th>Date</th><th>Holiday</th></tr></thead>
+          <tbody>${c.weekend.map((h,i) => `<tr>
+            <td class="sr-cell">${i+1}</td>
+            <td class="date-cell">${h.date} ${getDayChip(h.date)}</td>
+            <td class="holiday-name">${h.holiday}${h.tentative ? '<span class="tentative-tag">Tentative</span>' : ''}</td>
+          </tr>`).join('')}</tbody>
+        </table>
+      </div>`;
+    }
+  }
+
+  // India state totals
+  if (c.indiaStates && c.stateTotals) {
+    html += `<div style="margin:12px 0 8px;padding:10px 14px;background:#f9f8f5;border-radius:8px;border:1px solid var(--border);display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+      <span style="font-size:11px;font-weight:600;color:var(--muted)">TOTAL DAYS:</span>
+      ${Object.entries(c.stateTotals).map(([s,n]) => `<span style="font-size:13px"><strong>${STATE_NAMES[s]}</strong> <span style="color:var(--accent);font-weight:700">${n}</span></span>`).join(' &nbsp;·&nbsp; ')}
+    </div>`;
+  }
+
+  // Notes
+  if (c.notes && c.notes.length) {
+    html += `<div class="notes-block">${c.notes.map(n=>`<p>— ${n}</p>`).join('')}</div>`;
+  }
+
+  return html;
+}
+
+function renderIndiaStateTable(holidays, label, isOptional=false) {
+  const states = ['MH','KL','TN','KA','TG'];
+  const sectionClass = isOptional ? 'optional-section' : '';
+  const labelColor = label.includes('Weekend') ? 'color:#c0392b' : '';
+  return `<div class="${sectionClass}" style="${isOptional?'':''}">
+    <div class="section-label" style="margin:${sectionClass?'12px 16px 8px':'16px 0 10px'};${labelColor}">${label}</div>
+    <div style="overflow-x:auto">
+    <table class="holiday-table" style="min-width:640px">
+      <thead><tr class="state-header-row">
+        <th>#</th><th>Date</th><th>Holiday</th>
+        ${states.map(s=>`<th style="text-align:center;min-width:86px">${STATE_NAMES[s]}</th>`).join('')}
+      </tr></thead>
+      <tbody>${holidays.map((h,i) => `<tr>
+        <td class="sr-cell">${i+1}</td>
+        <td class="date-cell">${h.date} ${getDayChip(h.date)}</td>
+        <td class="holiday-name">${h.holiday}${h.tentative?'<span class="tentative-tag">Tentative</span>':''}</td>
+        ${states.map(s => `<td style="text-align:center">${(h.states||[]).includes(s) ? '<span style="color:var(--accent);font-size:16px">✓</span>' : '<span style="color:#e0ddd7">—</span>'}</td>`).join('')}
+      </tr>`).join('')}</tbody>
+    </table>
+    </div>
+  </div>`;
+}
+
+// ── CONTROLS ──────────────────────────────────────────
+function selectCountry(id) {
+  currentCountry = id;
+  // For India state sub-views, re-render content directly
+  if (id.startsWith('india')) {
+    renderContent();
+    renderNav();
+    return;
+  }
+  document.querySelectorAll('.country-section').forEach(el => {
+    el.classList.toggle('visible', el.id === `section-${id}`);
+  });
+  document.querySelectorAll('.nav-country').forEach(el => {
+    el.classList.toggle('active', el.dataset.id === id);
+  });
+  renderNav();
+}
+
+function setFilter(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderContent();
+  renderNav();
+}
+
+document.getElementById('search-input').addEventListener('input', function() {
+  searchText = this.value.trim();
+  renderNav();
+  renderContent();
+});
+
+// ── TODAY ─────────────────────────────────────────────
+const now = new Date();
+document.getElementById('today-display').textContent = now.toLocaleDateString('en-GB', {weekday:'short',day:'numeric',month:'short',year:'numeric'});
+
+// ── INIT ──────────────────────────────────────────────
+renderNav();
+renderContent();
+</script>
